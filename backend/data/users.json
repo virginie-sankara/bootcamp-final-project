@@ -1,0 +1,39 @@
+// [
+//     {
+//       "_id": "user1",
+//       "firstName": "Baldwin",
+//       "username": "baldwinj",
+//     "email": "TODO",
+//     EMAIL ADDRESS"invitationsSent": [],
+//     EMAIL ADDRESS"invitationsReceived": [],
+//     EMAIL ADDRESS"friends": [],
+//       "imageSrc": "TODO",
+//       "watched": [],
+//       "formIds": [],
+
+//     },
+//     {
+//         "_id": "user2",
+//         "firstName": "Sanaa",
+//         "username": "sanaak",
+//         "imageSrc": "TODO",
+//         "watched": [],
+//         "formIds": []
+//       },
+//       {
+//         "_id": "user3",
+//         "firstName": "Dany",
+//         "username": "danyl",
+//         "imageSrc": "TODO",
+//         "watched": [],
+//         "formIds": []
+//       },
+//       {
+//         "_id": "user3",
+//         "firstName": "Pablo",
+//         "username": "pablon",
+//         "imageSrc": "TODO",
+//         "watched": [],
+//         "formIds": []
+//       }
+//   ]
