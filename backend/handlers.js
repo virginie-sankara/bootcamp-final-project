@@ -69,10 +69,63 @@ const getUser = async (req, res) => {
   }
 };
 
-// POST : FORM
+// POST : MATCH
+const addMatch = async (req, res) => {
+  const { userIds, formData } = req.body;
 
-// GET : FORMS
-// GET : FORM
-// PATCH : FORM
+  // validation ?
 
-module.exports = { getUsers, getUser };
+  try {
+    await client.connect();
+    console.log("connected");
+
+    const newMatch = await db.collection("matches").insertOne({
+      userIds,
+      formData1: formData,
+      formData2: null,
+      suggestion: null,
+    });
+
+    res.status(200).json({
+      status: 200,
+      data: req.body,
+      message: "New match successfully created",
+    });
+    client.close();
+    console.log("disconnected");
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+    console.log(err.stack);
+    client.close();
+    console.log("disconnected");
+  }
+};
+// GET : MATCHES
+const getMatches = async (req, res) => {
+  try {
+    await client.connect();
+    console.log("connected");
+
+    const matches = await db.collection("matches").find().toArray();
+    console.log(matches);
+
+    matches
+      ? res.status(200).json({
+          status: 200,
+          data: matches,
+          message: "The matches collection was successully found",
+        })
+      : res.status(404).json({ status: 404, data: "Not found" });
+
+    client.close();
+    console.log("disconnected");
+  } catch (err) {
+    cononsole.log(err.stack);
+    client.close();
+    console.log("disconected");
+  }
+};
+// GET : MATCH
+// PATCH : MATCH
+
+module.exports = { getUsers, getUser, addMatch, getMatches };
