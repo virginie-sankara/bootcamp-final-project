@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import Input from "./Input";
 
 const Form = (handleSubmit) => {
   const [formData, setFormData] = useState({});
+  const [usersData, setUsersData] = useState([]);
 
   const handleChange = (key, value) => {
     setFormData({
@@ -13,8 +14,23 @@ const Form = (handleSubmit) => {
     });
   };
 
+  //   GET : Users data
+  useEffect(() => {});
+
   return (
     <StyledForm onSubmit={(e) => handleSubmit(e, formData)}>
+      <label>
+        Pick your partner :
+        <select onChange={handleChange}>
+          <option value="">Select a partner</option>
+          {}
+          <option value="lime">Lime</option>
+          <option selected value="coconut">
+            Coconut
+          </option>
+          <option value="mango">Mango</option>
+        </select>
+      </label>
       <Input
         type="text"
         placeholder="Partner"
