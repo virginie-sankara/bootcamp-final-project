@@ -6,7 +6,7 @@ const morgan = require("morgan");
 const port = 8888;
 
 // handlers
-const { getUsers } = require("./handlers");
+const { getUsers, getUser } = require("./handlers");
 
 express()
   // Below are methods that are included in express(). We chain them for convenience.
@@ -20,6 +20,7 @@ express()
   // ---------------------------------
   // add new endpoints here 👇
   .get("/users", getUsers)
+  .get("/user/:username", getUser)
   // add new endpoints here ☝️
   // ---------------------------------
   // Nothing to modify below this line

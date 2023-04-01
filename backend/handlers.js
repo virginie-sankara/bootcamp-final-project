@@ -41,11 +41,37 @@ const getUsers = async (req, res) => {
   }
 };
 
-// GET : USER
+// GET : A SPECIFIC USER
+const getUser = async (req, res) => {
+  const username = req.params.username;
+  console.log(username);
+  try {
+    await client.connect();
+    console.log("connected");
+
+    const user = await db.collection("users").findOne({ username });
+
+    user
+      ? res.status(200).json({
+          status: 200,
+          data: user,
+          message: "User successfully found",
+        })
+      : res.status(404).json({ status: 404, data: "User not found" });
+    client.close();
+    console.log("disconnected");
+  } catch (err) {
+    console.log(err.stack);
+    client.close();
+    console.log("disconnected");
+  }
+};
+
 // PATCH : USER
+
 // POST : FORM
 // GET : FORMS
 // GET : FORM
 // PATCH : FORM
 
-module.exports = { getUsers };
+module.exports = { getUsers, getUser };
