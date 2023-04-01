@@ -20,7 +20,7 @@ express()
   // ---------------------------------
   // add new endpoints here 👇
   .get("/users", getUsers)
-  .get("/user/:username", getUser)
+  .get("/user/:user", getUser)
   // add new endpoints here ☝️
   // ---------------------------------
   // Nothing to modify below this line

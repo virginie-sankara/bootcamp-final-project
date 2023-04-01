@@ -1,5 +1,5 @@
 "use strict";
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 
 require("dotenv").config();
 const { MONGO_URI } = process.env;
@@ -43,13 +43,15 @@ const getUsers = async (req, res) => {
 
 // GET : A SPECIFIC USER
 const getUser = async (req, res) => {
-  const username = req.params.username;
-  console.log(username);
+  const _id = req.params.user;
+  console.log(_id);
   try {
     await client.connect();
     console.log("connected");
 
-    const user = await db.collection("users").findOne({ username });
+    const user = await db
+      .collection("users")
+      .findOne({ _id: new ObjectId(_id) });
 
     user
       ? res.status(200).json({
@@ -67,9 +69,8 @@ const getUser = async (req, res) => {
   }
 };
 
-// PATCH : USER
-
 // POST : FORM
+
 // GET : FORMS
 // GET : FORM
 // PATCH : FORM
