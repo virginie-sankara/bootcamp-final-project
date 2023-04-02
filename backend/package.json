@@ -9,6 +9,7 @@
     "mongodb": "^5.1.0",
     "morgan": "^1.10.0",
     "node": "^19.8.1",
+    "node-fetch": "2",
     "nodemon": "^2.0.22"
   },
   "scripts": {

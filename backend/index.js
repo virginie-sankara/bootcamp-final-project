@@ -6,7 +6,14 @@ const morgan = require("morgan");
 const port = 8888;
 
 // handlers
-const { getUsers, getUser, addMatch, getMatches } = require("./handlers");
+const {
+  getUsers,
+  getUser,
+  addMatch,
+  getMatches,
+  getMatch,
+  updateMatch,
+} = require("./handlers");
 
 express()
   // Below are methods that are included in express(). We chain them for convenience.
@@ -22,7 +29,9 @@ express()
   .get("/users", getUsers)
   .get("/user/:user", getUser)
   .get("/matches", getMatches)
+  .get("/match/:match", getMatch)
   .post("/match", addMatch)
+  .patch("/match/:match", updateMatch)
 
   // add new endpoints here ☝️
   // ---------------------------------
