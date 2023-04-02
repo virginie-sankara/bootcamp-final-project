@@ -1,4 +1,4 @@
-// ALL ENGLISH GENRE
+// ALL ENGLISH GENRES
 // TO_DO : Assign ids to genre.name in FE corresponding to the following ids :
 const movieGenres = [
   { id: 28, name: "Action" },

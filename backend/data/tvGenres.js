@@ -1,4 +1,4 @@
-// if matchToUpdate.type === tvshow
+// ALL ENGLISH GENRES
 // TO_DO : Assign ids to genre.name in FE corresponding to the following ids :
 const tvGenres = [
   { id: 10759, name: "Action & Adventure" },

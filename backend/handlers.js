@@ -195,7 +195,7 @@ const updateMatch = async (req, res) => {
 
     // Return response to browser
     const response = await fetch(
-      `https://api.themoviedb.org/3/discover/${matchToUpdate.type}?api_key=${TMDB_KEY}&page=1&with_genres=${queryGenre}&with_runtime.lte=${queryLength}`
+      `https://api.themoviedb.org/3/discover/${matchToUpdate.type}?api_key=${TMDB_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=true&with_genres=${queryGenre}&with_runtime.lte=${queryLength}&page=1`
     ).then((movieResponse) => movieResponse.json());
 
     console.log(response);
