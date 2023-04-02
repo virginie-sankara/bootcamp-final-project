@@ -89,7 +89,7 @@ const addMatch = async (req, res) => {
 
     res.status(200).json({
       status: 200,
-      data: req.body,
+      data: newMatch,
       message: "New match successfully created",
     });
     client.close();
@@ -157,7 +157,8 @@ const getMatch = async (req, res) => {
 };
 // PATCH (update) : MATCH
 const updateMatch = async (req, res) => {
-  const { _id, formData2, suggestion } = req.body;
+  const { _id, formData2 } = req.body;
+  let suggestion = null;
 
   try {
     await client.connect();
@@ -170,6 +171,7 @@ const updateMatch = async (req, res) => {
 
     const type = matchToUpdate.type;
     const formData1 = matchToUpdate.formData1;
+    console.log("formData1 is", formData1);
 
     const matchToUpdateResult = await db
       .collection("matches")
