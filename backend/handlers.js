@@ -71,7 +71,7 @@ const getUser = async (req, res) => {
 
 // POST : MATCH
 const addMatch = async (req, res) => {
-  const { userIds, formData1 } = req.body;
+  const { userIds, type, formData1 } = req.body;
 
   // validation ?
 
@@ -81,6 +81,7 @@ const addMatch = async (req, res) => {
 
     const newMatch = await db.collection("matches").insertOne({
       userIds,
+      type: type,
       formData1: formData1,
       formData2: null,
       suggestion: null,
@@ -164,42 +165,118 @@ const updateMatch = async (req, res) => {
 
     // Combine current match form data with form data from second user
     const query = { _id: new ObjectId(_id) };
+    const matchToUpdate = await db.collection("matches").findOne(query);
     const newValue = { $set: { formData2: formData2 } };
 
-    const matchToUpdate = await db
+    const type = matchToUpdate.type;
+    const formData1 = matchToUpdate.formData1;
+
+    const matchToUpdateResult = await db
       .collection("matches")
       .updateOne(query, newValue);
+
     console.log("Match.formData2 successfully updated");
 
-    // success response
-    res.status(200).json({
-      status: 200,
-      data: matchToUpdate.formData2,
-      message: "Match.formData2 successfully updated",
-    });
+    // Create new object with values to query
+    const formDataToQuery = {
+      length: formData1.length.filter((val) => formData2.length.includes(val)),
+      // Combine genre requested into new array and remove duplicated values
+      genre: [...new Set(formData1.genre.concat(formData2.genre))],
+    };
+    console.log(formDataToQuery);
 
-    client.close();
-    console.log("disconnected!");
+    // Set queries to formDataToQuery values
+    const queryLength = formDataToQuery.length.toString();
+    const queryGenre = formDataToQuery.genre.toString();
+
+    // Get suggestion and patch Match with suggestion AND form data 2
+    try {
+      if (matchToUpdate.type === "movie") {
+        // Return response to browser
+        const movieResponse = await fetch(
+          `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_KEY}&page=1&with_genres=${queryGenre}&with_runtime.lte=${queryLength}`
+        ).then((movieResponse) => movieResponse.json());
+
+        console.log(movieResponse);
+
+        // Get random index from the movieResponse.results array
+        const randomIndex = Math.floor(
+          Math.random() * movieResponse.results.length
+        );
+
+        // Get random suggestion from the movieResponse.results array
+        const randomSuggestion = movieResponse.results[randomIndex];
+
+        // Combine current match form data with form data from second user
+        const newMovieSuggestion = { $set: { suggestion: randomSuggestion } };
+
+        const matchResult = await db
+          .collection("matches")
+          .updateOne(query, newMovieSuggestion);
+
+        console.log(
+          "Match.suggestion successfully updated with a movie result"
+        );
+
+        // Success response for Movie
+        res.status(200).json({
+          status: 200,
+          data: matchResult,
+          message: "Match successfully completed",
+        });
+        client.close();
+        console.log("disconnected");
+      }
+      // If matchToUpdate.type === TV
+      if (matchToUpdate.type === "tv") {
+        // Return response to browser
+        const tvResponse = await fetch(
+          `https://api.themoviedb.org/3/discover/tv?api_key=${TMDB_KEY}&page=1&with_genres=${queryGenre}&with_runtime.lte=${queryLength}`
+        ).then((tvResponse) => tvResponse.json());
+
+        console.log(tvResponse);
+
+        // Get random index from the tvResponse.results array
+        const randomIndex = Math.floor(
+          Math.random() * tvResponse.results.length
+        );
+
+        // Get random suggestion from the movieResponse.results array
+        const randomSuggestion = tvResponse.results[randomIndex];
+
+        // Combine current match form data with form data from second user
+        const newTvSuggestion = { $set: { suggestion: randomSuggestion } };
+
+        const matchResult = await db
+          .collection("matches")
+          .updateOne(query, newTvSuggestion);
+
+        console.log(
+          "Match.suggestion successfully updated with a TV show result"
+        );
+
+        // Success response for TV
+        res.status(200).json({
+          status: 200,
+          data: matchResult,
+          message: "Match successfully completed",
+        });
+        client.close();
+        console.log("disconnected");
+      }
+    } catch (err) {
+      res.status(500).json({ status: 500, message: err.message });
+      console.log(err.stack);
+      client.close();
+      console.log("disconnected");
+    }
+    //   Error handling
   } catch (err) {
-    res.status(400).json({
-      status: 400,
-      error: err.message,
-    });
+    res.status(500).json({ status: 500, message: err.message });
     console.log(err.stack);
     client.close();
-    console.log("disconnected!");
+    console.log("disconnected");
   }
-  // TO_DO
-  // Update query to movie to filter result based on form datas
-  // Get suggestion and patch Match with suggestion AND form data 2
-  // Return response to browser
-  // Error handling API testing
-  //   const response = await fetch(
-  //     `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_KEY}&page=1`
-  //   ).then((response) => response.json());
-  //   console.log(response);
-
-  //   res.status(200).send();
 };
 
 module.exports = {
