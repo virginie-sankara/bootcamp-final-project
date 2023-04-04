@@ -1,98 +1,96 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-import Input from "./Input";
+const Form = ({ user, userData, handleSubmit }) => {
+  const [formData1, setFormData1] = useState({
+    partners: null,
+    type: "",
+    genre: [],
+    length: [],
+  });
 
-const Form = ({ userData, handleSubmit }) => {
-  const [formData1, setformData1] = useState({});
-  const [partner, setPartner] = useState("");
   const [movieGenresData, setMovieGenresData] = useState([]);
   const [tvGenresData, setTvGenresData] = useState([]);
 
-  // Get : Movie genres
   useEffect(() => {
-    fetch("/get-movie-genres")
-      .then((res) => res.json())
-      .then((response) => {
-        if (response.status === 400 || response.status === 500) {
-          throw new Error(response.message);
+    Promise.all([fetch("/get-movie-genres"), fetch("/get-tv-genres")])
+      .then(([movieGenresRes, tvGenresRes]) =>
+        Promise.all([movieGenresRes.json(), tvGenresRes.json()])
+      )
+      .then(([movieGenres, tvGenres]) => {
+        if (
+          movieGenres.status === 400 ||
+          movieGenres.status === 500 ||
+          tvGenres.status === 400 ||
+          tvGenres.status === 500
+        ) {
+          throw new Error(`${movieGenres.message}, ${tvGenres.message}`);
         } else {
-          setMovieGenresData(response.movieGenres);
-          console.log(response.movieGenres);
+          setMovieGenresData(movieGenres.movieGenres);
+          console.log(movieGenres);
+          setTvGenresData(tvGenres.tvGenres);
         }
       });
   }, []);
 
-  // Get : Tv genres
-  useEffect(() => {
-    fetch("/get-tv-genres")
-      .then((res) => res.json())
-      .then((response) => {
-        if (response.status === 400 || response.status === 500) {
-          throw new Error(response.message);
-        } else {
-          setTvGenresData(response.tvGenres);
-          console.log(response.tvGenres);
-        }
-      });
-  }, []);
-
-  const navigate = useNavigate();
-
-  const handlePartnerChange = (e) => {
-    setPartner(e.target.value);
-    console.log(e.target.value);
-  };
+  console.log(formData1);
+  console.log("test");
 
   const handleChange = (name, value) => {
-    console.log(name, value);
-    setformData1({
+    setFormData1((formData1) => ({
       ...formData1,
       [name]: value,
-    });
+    }));
   };
 
   return (
     <>
       <StyledForm onSubmit={(e) => handleSubmit(e, formData1)}>
-        <label>
-          Pick your partner:
-          <select onChange={handlePartnerChange}>
-            <option name="partner" value="">
-              Select a partner
-            </option>
-            {userData.friends.map((friend) => {
-              return (
-                //  Verify : Is this okay ? change for username
-                <option key={friend.email} name="partner" value={friend.email}>
-                  {friend.username}
-                </option>
-              );
-            })}
-          </select>
-        </label>
+        <div>
+          <h2>Pick your partner</h2>
+          {userData.friends.map((friend) => (
+            <label key={friend.email}>
+              <Input
+                type="radio"
+                name="partners"
+                checked={formData1.partners === friend.email}
+                onChange={(e) => handleChange(e.target.name, friend.email)}
+              />
+              {friend.username}
+              <FriendAvatar
+                src={friend.avatarSrc}
+                alt={`Avatar for ${friend.username}`}
+              />
+            </label>
+          ))}
+        </div>
         <div>
           <Link to="/">Next</Link>
         </div>
-        {!formData1.type && (
+        {formData1.partner !== "" && (
           <div>
             <h2>Media</h2>
-            <Input
-              type="radio"
-              value="movie"
-              name="type"
-              handleChange={handleChange}
-            />
-            Movie
-            <Input
-              type="radio"
-              value="tv"
-              name="type"
-              handleChange={handleChange}
-            />
-            TV Show
+            <label>
+              <Input
+                type="radio"
+                value="movie"
+                name="type"
+                checked={formData1.type === "movie"}
+                onChange={(e) => handleChange(e.target.name, e.target.value)}
+              />
+              Movie
+            </label>
+            <label>
+              <Input
+                type="radio"
+                value="tv"
+                name="type"
+                checked={formData1.type === "tv"}
+                onChange={(e) => handleChange(e.target.name, e.target.value)}
+              />
+              TV Show
+            </label>
           </div>
         )}
         <div>
@@ -107,9 +105,14 @@ const Form = ({ userData, handleSubmit }) => {
                   <label key={genre._id}>
                     <Input
                       type="checkbox"
-                      value={genre._id}
                       name="genre"
-                      handleChange={handleChange}
+                      checked={formData1.genre.includes(genre._id)}
+                      onChange={(e) =>
+                        handleChange(e.target.name, [
+                          ...formData1.genre,
+                          genre._id,
+                        ])
+                      }
                     />
                     {genre.name}
                   </label>
@@ -123,7 +126,13 @@ const Form = ({ userData, handleSubmit }) => {
                       type="checkbox"
                       value={genre._id}
                       name="genre"
-                      handleChange={handleChange}
+                      checked={formData1.genre.includes(genre._id)}
+                      onChange={(e) =>
+                        handleChange(e.target.name, [
+                          ...formData1.genre,
+                          e.target.value,
+                        ])
+                      }
                     />
                     {genre.name}
                   </label>
@@ -140,7 +149,7 @@ const Form = ({ userData, handleSubmit }) => {
                 type="checkbox"
                 value="30"
                 name="type"
-                handleChange={handleChange}
+                onChange={handleChange}
               />
               0-60 min
             </label>
@@ -149,7 +158,7 @@ const Form = ({ userData, handleSubmit }) => {
                 type="checkbox"
                 value="60"
                 name="type"
-                handleChange={handleChange}
+                onChange={handleChange}
               />
               60-90 min
             </label>
@@ -158,7 +167,7 @@ const Form = ({ userData, handleSubmit }) => {
                 type="checkbox"
                 value="90"
                 name="type"
-                handleChange={handleChange}
+                onChange={handleChange}
               />
               +90 min
             </label>
@@ -172,7 +181,7 @@ const Form = ({ userData, handleSubmit }) => {
                   type="checkbox"
                   value="30"
                   name="type"
-                  handleChange={handleChange}
+                  onChange={handleChange}
                 />
                 0-30 min
               </label>
@@ -181,7 +190,7 @@ const Form = ({ userData, handleSubmit }) => {
                   type="checkbox"
                   value="60"
                   name="type"
-                  handleChange={handleChange}
+                  onChange={handleChange}
                 />
                 +30-60 min
               </label>
@@ -190,7 +199,7 @@ const Form = ({ userData, handleSubmit }) => {
                   type="checkbox"
                   value="200"
                   name="type"
-                  handleChange={handleChange}
+                  onChange={handleChange}
                 />
                 +60 min
               </label>
@@ -225,6 +234,18 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   margin-left: 50px;
+`;
+
+const Input = styled.input`
+  padding: 4px;
+  margin: 5px 0px;
+`;
+
+const FriendAvatar = styled.img`
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
 `;
 
 export default Form;

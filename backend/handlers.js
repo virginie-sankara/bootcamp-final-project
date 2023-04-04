@@ -1,27 +1,21 @@
 "use strict";
 require("dotenv").config();
-const { MongoClient, ObjectId } = require("mongodb");
-const { MONGO_URI, TMDB_KEY } = process.env;
+const { ObjectId } = require("mongodb");
+const { TMDB_KEY } = process.env;
 const fetch = require("node-fetch");
-
-const options = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
+const mongo = require("./mongo");
+mongo.setup();
 
 const { users } = require("./data/users");
 
 // declare a variable called client, and assign it the MongoClient().
-const client = new MongoClient(MONGO_URI, options);
-const db = client.db("finalproject");
+
+const db = () => mongo.get().db("finalproject");
 
 // GET : USERS
 const getUsers = async (req, res) => {
   try {
-    await client.connect();
-    console.log("connected");
-
-    const users = await db.collection("users").find().toArray();
+    const users = await db().collection("users").find().toArray();
     console.log(users);
 
     users
@@ -31,13 +25,8 @@ const getUsers = async (req, res) => {
           message: "The users were successfully found",
         })
       : res.status(404).json({ status: 404, data: "Users not found" });
-
-    client.close();
-    console.log("disconnected");
   } catch (err) {
-    console.log(err.stack);
-    client.close();
-    console.log("disconnected");
+    res.status(500).json({ status: 500, data: err.message });
   }
 };
 
@@ -46,10 +35,7 @@ const getUser = async (req, res) => {
   const email = req.params.user;
   console.log(email);
   try {
-    await client.connect();
-    console.log("connected");
-
-    const user = await db.collection("users").findOne({ email });
+    const user = await db().collection("users").findOne({ email });
 
     user
       ? res.status(200).json({
@@ -58,12 +44,8 @@ const getUser = async (req, res) => {
           message: "User successfully found",
         })
       : res.status(404).json({ status: 404, data: "User not found" });
-    client.close();
-    console.log("disconnected");
   } catch (err) {
-    console.log(err.stack);
-    client.close();
-    console.log("disconnected");
+    res.status(500).json({ status: 500, data: err.message });
   }
 };
 
@@ -74,10 +56,7 @@ const addMatch = async (req, res) => {
   // validation ?
 
   try {
-    await client.connect();
-    console.log("connected");
-
-    const newMatch = await db.collection("matches").insertOne({
+    const newMatch = await db().collection("matches").insertOne({
       userIds,
       type: type,
       formData1: formData1,
@@ -90,23 +69,15 @@ const addMatch = async (req, res) => {
       newMatchData: newMatch,
       message: "New match successfully created",
     });
-    client.close();
-    console.log("disconnected");
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
-    console.log(err.stack);
-    client.close();
-    console.log("disconnected");
   }
 };
 
 // GET : MOVIE GENRES
 const getMovieGenres = async (req, res) => {
   try {
-    await client.connect();
-    console.log("connected");
-
-    const movieGenres = await db.collection("movieGenres").find().toArray();
+    const movieGenres = await db().collection("movieGenres").find().toArray();
     console.log(movieGenres);
 
     movieGenres
@@ -116,23 +87,15 @@ const getMovieGenres = async (req, res) => {
           message: "The movie genres were successfully found",
         })
       : res.status(404).json({ status: 404, data: "Movie genres not found" });
-
-    client.close();
-    console.log("disconnected");
   } catch (err) {
-    console.log(err.stack);
-    client.close();
-    console.log("disconnected");
+    res.status(500).json({ status: 500, message: err.message });
   }
 };
 
 // GET : TV GENRES
 const getTvGenres = async (req, res) => {
   try {
-    await client.connect();
-    console.log("connected");
-
-    const tvGenres = await db.collection("tvGenres").find().toArray();
+    const tvGenres = await db().collection("tvGenres").find().toArray();
     console.log(tvGenres);
 
     tvGenres
@@ -142,23 +105,15 @@ const getTvGenres = async (req, res) => {
           message: "TV genres were successfully found",
         })
       : res.status(404).json({ status: 404, data: "TV genres not found" });
-
-    client.close();
-    console.log("disconnected");
   } catch (err) {
-    console.log(err.stack);
-    client.close();
-    console.log("disconnected");
+    res.status(500).json({ status: 500, message: err.message });
   }
 };
 
 // GET : MATCHES
 const getMatches = async (req, res) => {
   try {
-    await client.connect();
-    console.log("connected");
-
-    const matches = await db.collection("matches").find().toArray();
+    const matches = await db().collection("matches").find().toArray();
     console.log(matches);
 
     matches
@@ -168,13 +123,8 @@ const getMatches = async (req, res) => {
           message: "The matches collection was successully found",
         })
       : res.status(404).json({ status: 404, data: "Not found" });
-
-    client.close();
-    console.log("disconnected");
   } catch (err) {
-    cononsole.log(err.stack);
-    client.close();
-    console.log("disconected");
+    res.status(500).json({ status: 500, data: err.message });
   }
 };
 
@@ -184,10 +134,7 @@ const getMatch = async (req, res) => {
   console.log(_id);
 
   try {
-    await client.connect();
-    console.log("connected");
-
-    const match = await db
+    const match = await db()
       .collection("matches")
       .findOne({ _id: new ObjectId(_id) });
 
@@ -198,12 +145,8 @@ const getMatch = async (req, res) => {
           message: "Match successfully found",
         })
       : res.status(404).json({ status: 404, data: "Match not found" });
-    client.close();
-    console.log("disconnected");
   } catch (err) {
-    console.log(err.stack);
-    client.close();
-    console.log("disconnected");
+    res.status(500).json({ status: 500, data: err.message });
   }
 };
 // PATCH (update) : MATCH
@@ -212,19 +155,16 @@ const updateMatch = async (req, res) => {
   let suggestion = null;
 
   try {
-    await client.connect();
-    console.log("connected");
-
     // Combine current match form data with form data from second user
     const query = { _id: new ObjectId(_id) };
-    const matchToUpdate = await db.collection("matches").findOne(query);
+    const matchToUpdate = await db().collection("matches").findOne(query);
     const newValue = { $set: { formData2: formData2 } };
 
     const type = matchToUpdate.type;
     const formData1 = matchToUpdate.formData1;
     console.log("formData1 is", formData1);
 
-    const matchToUpdateResult = await db
+    const matchToUpdateResult = await db()
       .collection("matches")
       .updateOne(query, newValue);
 
@@ -260,7 +200,7 @@ const updateMatch = async (req, res) => {
     // Combine current match form data with form data from second user
     const newSuggestion = { $set: { suggestion: randomSuggestion } };
 
-    const matchResult = await db
+    const matchResult = await db()
       .collection("matches")
       .updateOne(query, newSuggestion);
 
@@ -270,14 +210,9 @@ const updateMatch = async (req, res) => {
       data: matchResult,
       message: "Match successfully completed",
     });
-    client.close();
-    console.log("disconnected");
     //   Error handling
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
-    console.log(err.stack);
-    client.close();
-    console.log("disconnected");
   }
 };
 
