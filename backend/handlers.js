@@ -27,7 +27,7 @@ const getUsers = async (req, res) => {
     users
       ? res.status(200).json({
           status: 200,
-          data: users,
+          users: users,
           message: "The users were successfully found",
         })
       : res.status(404).json({ status: 404, data: "Users not found" });
@@ -43,20 +43,18 @@ const getUsers = async (req, res) => {
 
 // GET : A SPECIFIC USER
 const getUser = async (req, res) => {
-  const _id = req.params.user;
-  console.log(_id);
+  const email = req.params.user;
+  console.log(email);
   try {
     await client.connect();
     console.log("connected");
 
-    const user = await db
-      .collection("users")
-      .findOne({ _id: new ObjectId(_id) });
+    const user = await db.collection("users").findOne({ email });
 
     user
       ? res.status(200).json({
           status: 200,
-          data: user,
+          user: user,
           message: "User successfully found",
         })
       : res.status(404).json({ status: 404, data: "User not found" });
@@ -89,7 +87,7 @@ const addMatch = async (req, res) => {
 
     res.status(200).json({
       status: 200,
-      data: newMatch,
+      newMatchData: newMatch,
       message: "New match successfully created",
     });
     client.close();
@@ -101,6 +99,59 @@ const addMatch = async (req, res) => {
     console.log("disconnected");
   }
 };
+
+// GET : MOVIE GENRES
+const getMovieGenres = async (req, res) => {
+  try {
+    await client.connect();
+    console.log("connected");
+
+    const movieGenres = await db.collection("movieGenres").find().toArray();
+    console.log(movieGenres);
+
+    movieGenres
+      ? res.status(200).json({
+          status: 200,
+          movieGenres: movieGenres,
+          message: "The movie genres were successfully found",
+        })
+      : res.status(404).json({ status: 404, data: "Movie genres not found" });
+
+    client.close();
+    console.log("disconnected");
+  } catch (err) {
+    console.log(err.stack);
+    client.close();
+    console.log("disconnected");
+  }
+};
+
+// GET : TV GENRES
+const getTvGenres = async (req, res) => {
+  try {
+    await client.connect();
+    console.log("connected");
+
+    const tvGenres = await db.collection("tvGenres").find().toArray();
+    console.log(tvGenres);
+
+    tvGenres
+      ? res.status(200).json({
+          status: 200,
+          tvGenres: tvGenres,
+          message: "TV genres were successfully found",
+        })
+      : res.status(404).json({ status: 404, data: "TV genres not found" });
+
+    client.close();
+    console.log("disconnected");
+  } catch (err) {
+    console.log(err.stack);
+    client.close();
+    console.log("disconnected");
+  }
+};
+
 // GET : MATCHES
 const getMatches = async (req, res) => {
   try {
@@ -113,7 +164,7 @@ const getMatches = async (req, res) => {
     matches
       ? res.status(200).json({
           status: 200,
-          data: matches,
+          matches: matches,
           message: "The matches collection was successully found",
         })
       : res.status(404).json({ status: 404, data: "Not found" });
@@ -143,7 +194,7 @@ const getMatch = async (req, res) => {
     match
       ? res.status(200).json({
           status: 200,
-          data: match,
+          match: match,
           message: "Match successfully found",
         })
       : res.status(404).json({ status: 404, data: "Match not found" });
@@ -233,6 +284,8 @@ const updateMatch = async (req, res) => {
 module.exports = {
   getUsers,
   getUser,
+  getMovieGenres,
+  getTvGenres,
   addMatch,
   getMatches,
   getMatch,

@@ -1,11 +1,12 @@
 import { Link, Route, Routes } from "react-router-dom";
 
-const Home = ({ user, loginWithPopup, logout }) => {
+const Home = ({ user, userData, loginWithPopup, logout }) => {
   return (
     <>
       {user ? (
         <>
-          <p>{user.email}</p>
+          <p>Nice to see you back {userData.firstName} !</p>
+
           <button onClick={logout}>Logout</button>
           <div>
             <Link to="/form">

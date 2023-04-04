@@ -9,6 +9,8 @@ const options = {
 };
 
 const { users } = require("./data/users");
+const { movieGenres } = require("./data/movieGenres");
+const { tvGenres } = require("./data/tvGenres");
 
 const batchImport = async () => {
   const client = new MongoClient(MONGO_URI, options);
@@ -17,17 +19,28 @@ const batchImport = async () => {
     await client.connect();
 
     const db = client.db("finalproject");
-    console.log("connnected!");
+    console.log("connected!");
 
     // Insert multiple users
-    const result = await db.collection("users").insertMany(users);
-    console.log(`${result.insertedCount} documents inserted`);
+    const usersResult = await db.collection("users").insertMany(users);
+    console.log(`${usersResult.insertedCount} documents inserted`);
+
+    // Insert movie genres
+    const movieResult = await db
+      .collection("movieGenres")
+      .insertMany(movieGenres);
+    console.log(`${movieResult.insertedCount} documents inserted`);
+
+    // Insert tv genres
+    const tvResult = await db.collection("tvGenres").insertMany(tvGenres);
+    console.log(`${tvResult.insertedCount} documents inserted`);
   } catch (err) {
     console.log(err.stack);
+  } finally {
+    // Close the client
+    await client.close();
+    console.log("disconnected");
   }
-  // Close the client
-  client.close();
-  console.log("disconnected");
 };
 
 batchImport();

@@ -9,6 +9,8 @@ const port = 8888;
 const {
   getUsers,
   getUser,
+  getMovieGenres,
+  getTvGenres,
   addMatch,
   getMatches,
   getMatch,
@@ -28,6 +30,8 @@ express()
   // add new endpoints here 👇
   .get("/users", getUsers)
   .get("/user/:user", getUser)
+  .get("/get-movie-genres", getMovieGenres)
+  .get("/get-tv-genres", getTvGenres)
   .get("/matches", getMatches)
   .get("/match/:match", getMatch)
   .post("/match", addMatch)
