@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const Form = ({ user, userData, handleSubmit }) => {
+  //SET formData1
   const [formData1, setFormData1] = useState({
     partners: null,
     type: "",
@@ -10,9 +11,16 @@ const Form = ({ user, userData, handleSubmit }) => {
     length: [],
   });
 
+  // RENDER div above each other
+  const [renderDivType, setRenderDivType] = useState(false);
+  const [renderDivGenre, setRenderDivGenre] = useState(false);
+  const [renderDivLength, setRenderDivLength] = useState(false);
+
+  // FETCH movie + tv genres
   const [movieGenresData, setMovieGenresData] = useState([]);
   const [tvGenresData, setTvGenresData] = useState([]);
 
+  //   GET : Movie + TV genres
   useEffect(() => {
     Promise.all([fetch("/get-movie-genres"), fetch("/get-tv-genres")])
       .then(([movieGenresRes, tvGenresRes]) =>
@@ -38,16 +46,26 @@ const Form = ({ user, userData, handleSubmit }) => {
   console.log("test");
 
   const handleChange = (name, value) => {
-    setFormData1((formData1) => ({
-      ...formData1,
-      [name]: value,
-    }));
+    if (name === "genre") {
+      if (formData1.genre.includes(value)) {
+        // if genre is already selected, remove it
+        setFormData1({
+          ...formData1,
+          genre: formData1.genre.filter((genre) => genre !== value),
+        });
+      } else {
+        setFormData1({ ...formData1, genre: [value] });
+      }
+    } else {
+      setFormData1({ ...formData1, [name]: value });
+    }
   };
 
   return (
     <>
       <StyledForm onSubmit={(e) => handleSubmit(e, formData1)}>
-        <div>
+        {/* DIV PARTNER */}
+        <DivPartner>
           <h2>Pick your partner</h2>
           {userData.friends.map((friend) => (
             <label key={friend.email}>
@@ -64,12 +82,22 @@ const Form = ({ user, userData, handleSubmit }) => {
               />
             </label>
           ))}
-        </div>
-        <div>
-          <Link to="/">Next</Link>
-        </div>
-        {formData1.partner !== "" && (
-          <div>
+          {/* // Button next that would render next div above the last */}
+          {formData1.partners && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setRenderDivType(true);
+              }}
+            >
+              Next
+            </button>
+          )}
+        </DivPartner>
+
+        {/* DIV TYPE */}
+        {renderDivType === true && (
+          <DivType>
             <h2>Media</h2>
             <label>
               <Input
@@ -91,22 +119,39 @@ const Form = ({ user, userData, handleSubmit }) => {
               />
               TV Show
             </label>
-          </div>
+            {/* // Button next that would render next div above the last */}
+            {formData1.type && (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setRenderDivGenre(true);
+                }}
+              >
+                Next
+              </button>
+            )}
+          </DivType>
         )}
-        <div>
-          <Link to="/">Next</Link>
-        </div>
-        {formData1.type && (
-          <>
+
+        {/* DIV GENRE */}
+        {renderDivGenre === true && (
+          <DivGenre>
             <h2>Genre</h2>
+
+            {/* if formData1.type === "movie" */}
             {formData1.type === "movie" &&
               movieGenresData.map((genre) => {
+                const isChecked = formData1.genre.includes(genre._id);
+                // set max checkboxes to 3
+                const isDisabled = formData1.genre.length >= 3 && !isChecked;
+
                 return (
                   <label key={genre._id}>
                     <Input
                       type="checkbox"
                       name="genre"
-                      checked={formData1.genre.includes(genre._id)}
+                      checked={isChecked}
+                      disabled={isDisabled}
                       onChange={(e) =>
                         handleChange(e.target.name, [
                           ...formData1.genre,
@@ -118,19 +163,25 @@ const Form = ({ user, userData, handleSubmit }) => {
                   </label>
                 );
               })}
+
+            {/* if formData1.type === "tv" */}
             {formData1.type === "tv" &&
               tvGenresData.map((genre) => {
+                const isChecked = formData1.genre.includes(genre._id);
+                // Set max checkboxes to 3
+                const isDisabled = formData1.genre.length >= 3 && !isChecked;
+
                 return (
                   <label key={genre._id}>
                     <Input
                       type="checkbox"
-                      value={genre._id}
                       name="genre"
-                      checked={formData1.genre.includes(genre._id)}
+                      checked={isChecked}
+                      disabled={isDisabled}
                       onChange={(e) =>
                         handleChange(e.target.name, [
                           ...formData1.genre,
-                          e.target.value,
+                          genre._id,
                         ])
                       }
                     />
@@ -138,77 +189,146 @@ const Form = ({ user, userData, handleSubmit }) => {
                   </label>
                 );
               })}
-          </>
+            {/* // Button next that would render next div above the last */}
+            {formData1.genre.length >= 1 && (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setRenderDivLength(true);
+                }}
+              >
+                Next
+              </button>
+            )}
+          </DivGenre>
         )}
 
-        {(formData1.genre && formData1.type === "movie" && (
-          <>
-            <h2>Length (movie)</h2>
-            <label>
-              <Input
-                type="checkbox"
-                value="30"
-                name="type"
-                onChange={handleChange}
-              />
-              0-60 min
-            </label>
-            <label>
-              <Input
-                type="checkbox"
-                value="60"
-                name="type"
-                onChange={handleChange}
-              />
-              60-90 min
-            </label>
-            <label>
-              <Input
-                type="checkbox"
-                value="90"
-                name="type"
-                onChange={handleChange}
-              />
-              +90 min
-            </label>
-          </>
-        )) ||
-          (formData1.type === "tv" && (
-            <>
-              <h2>Length (tv)</h2>
-              <label>
-                <Input
-                  type="checkbox"
-                  value="30"
-                  name="type"
-                  onChange={handleChange}
-                />
-                0-30 min
-              </label>
-              <label>
-                <Input
-                  type="checkbox"
-                  value="60"
-                  name="type"
-                  onChange={handleChange}
-                />
-                +30-60 min
-              </label>
-              <label>
-                <Input
-                  type="checkbox"
-                  value="200"
-                  name="type"
-                  onChange={handleChange}
-                />
-                +60 min
-              </label>
-            </>
-          ))}
+        {/* DIV LENGTH */}
+        {renderDivLength === true && (
+          <DivLength>
+            {formData1.type === "movie" && (
+              <>
+                <h2>Max length (movie)</h2>
+                <label>
+                  <Input
+                    type="radio"
+                    value="30"
+                    name="type"
+                    onChange={(e) =>
+                      handleChange(e.target.name, e.target.value)
+                    }
+                  />
+                  30 min
+                </label>
+                <label>
+                  <Input
+                    type="radio"
+                    value="60"
+                    name="type"
+                    onChange={(e) =>
+                      handleChange(e.target.name, e.target.value)
+                    }
+                  />
+                  60 min
+                </label>
+                <label>
+                  <Input
+                    type="radio"
+                    value="90"
+                    name="type"
+                    onChange={(e) =>
+                      handleChange(e.target.name, e.target.value)
+                    }
+                  />
+                  90 min
+                </label>
+                <label>
+                  <Input
+                    type="radio"
+                    value="120"
+                    name="type"
+                    onChange={(e) =>
+                      handleChange(e.target.name, e.target.value)
+                    }
+                  />
+                  120 min
+                </label>
+                <label>
+                  <Input
+                    type="radio"
+                    value="300"
+                    name="type"
+                    onChange={(e) =>
+                      handleChange(e.target.name, e.target.value)
+                    }
+                  />
+                  I'v got all the time
+                </label>
+              </>
+            )}
+            {formData1.type === "tv" && (
+              <>
+                <h2>Length (tv)</h2>
+                <label>
+                  <Input
+                    type="radio"
+                    value="20"
+                    name="type"
+                    onChange={(e) =>
+                      handleChange(e.target.name, e.target.value)
+                    }
+                  />
+                  20
+                </label>
+                <label>
+                  <Input
+                    type="radio"
+                    value="30"
+                    name="type"
+                    onChange={(e) =>
+                      handleChange(e.target.name, e.target.value)
+                    }
+                  />
+                  30
+                </label>
+                <label>
+                  <Input
+                    type="radio"
+                    value="60"
+                    name="type"
+                    onChange={(e) =>
+                      handleChange(e.target.name, e.target.value)
+                    }
+                  />
+                  60
+                </label>
+                <label>
+                  <Input
+                    type="radio"
+                    value="120"
+                    name="type"
+                    onChange={(e) =>
+                      handleChange(e.target.name, e.target.value)
+                    }
+                  />
+                  120
+                </label>
+                <label>
+                  <Input
+                    type="radio"
+                    value="300"
+                    name="type"
+                    onChange={(e) =>
+                      handleChange(e.target.name, e.target.value)
+                    }
+                  />
+                  I'v got all the time
+                </label>
+              </>
+            )}
+          </DivLength>
+        )}
 
-        <div>
-          <Link to="/">Next</Link>
-        </div>
         <Submit type="submit">Confirm</Submit>
       </StyledForm>
     </>
@@ -235,6 +355,11 @@ const StyledForm = styled.form`
   flex-direction: column;
   margin-left: 50px;
 `;
+
+const DivPartner = styled.div``;
+const DivType = styled.div``;
+const DivGenre = styled.div``;
+const DivLength = styled.div``;
 
 const Input = styled.input`
   padding: 4px;
