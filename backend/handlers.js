@@ -51,18 +51,18 @@ const getUser = async (req, res) => {
 
 // POST : MATCH
 const addMatch = async (req, res) => {
-  const { userIds, type, formData1 } = req.body;
-
-  // validation ?
+  const { formData1 } = req.body;
 
   try {
-    const newMatch = await db().collection("matches").insertOne({
-      userIds,
-      type: type,
-      formData1: formData1,
-      formData2: null,
-      suggestion: null,
-    });
+    const newMatch = await db()
+      .collection("matches")
+      .insertOne({
+        partners: [formData1.partners],
+        type: formData1.type,
+        formData1: { genre: [formData1.genre], length: formData1.length },
+        formData2: null,
+        suggestion: null,
+      });
 
     res.status(200).json({
       status: 200,

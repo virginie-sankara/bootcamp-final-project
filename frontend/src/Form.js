@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 // import { Link } from "react-router-dom";
 
-const Form = ({ user, userData, handleSubmit }) => {
+const Form = ({ user, userData }) => {
   //SET formData1
   const [formData1, setFormData1] = useState({
     partners: null,
     type: "",
     genre: [],
-    length: [],
+    length: "",
   });
 
   // RENDER div above each other
@@ -46,12 +46,45 @@ const Form = ({ user, userData, handleSubmit }) => {
   console.log("test");
 
   const handleChange = (name, value) => {
-    console.log(name, value);
-    console.log("valeur is" + typeof value);
-    setFormData1({
-      ...formData1,
-      [name]: value,
-    });
+    // console.log(name, value);
+    // console.log("valeur is " + typeof value);
+    if (name === "partners") {
+      setFormData1({
+        ...formData1,
+        [name]: [userData.email, value],
+      });
+    } else {
+      setFormData1({
+        ...formData1,
+        [name]: value,
+      });
+    }
+  };
+
+  const handleSubmit = (e, formData1) => {
+    e.preventDefault();
+
+    // TODO: POST info to server
+    fetch("/match", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ formData1 }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === 400 || data.status === 404 || data.status === 500) {
+          console.log(data);
+          throw new Error(data.message);
+        }
+        console.log(data);
+        console.log("Success", data.data);
+        // navigate("/confirmation");
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
   };
 
   return (
@@ -65,7 +98,7 @@ const Form = ({ user, userData, handleSubmit }) => {
               <Input
                 type="radio"
                 name="partners"
-                checked={formData1.partners === friend.email}
+                // checked={formData1.partners === friend.email}
                 onChange={(e) => handleChange(e.target.name, friend.email)}
               />
               {friend.username}
