@@ -178,12 +178,15 @@ const Form = ({ user, userData, handleSubmit }) => {
                       name="genre"
                       checked={isChecked}
                       disabled={isDisabled}
-                      onChange={(e) =>
-                        handleChange(e.target.name, [
-                          ...formData1.genre,
-                          genre._id,
-                        ])
-                      }
+                      onChange={(e) => {
+                        let res = null;
+                        if (isChecked) {
+                          res = formData1.genre.filter((e) => e !== genre._id);
+                        } else {
+                          res = [...formData1.genre, genre._id];
+                        }
+                        handleChange(e.target.name, res);
+                      }}
                     />
                     {genre.name}
                   </label>
@@ -206,123 +209,92 @@ const Form = ({ user, userData, handleSubmit }) => {
         {/* DIV LENGTH */}
         {renderDivLength === true && (
           <DivLength>
+            <h2>Max length </h2>
             {formData1.type === "movie" && (
               <>
-                <h2>Max length (movie)</h2>
                 <label>
                   <Input
                     type="radio"
-                    value="30"
-                    name="type"
-                    onChange={(e) =>
-                      handleChange(e.target.name, e.target.value)
-                    }
+                    name="length"
+                    onChange={(e) => handleChange(e.target.name, "30")}
                   />
                   30 min
                 </label>
                 <label>
                   <Input
                     type="radio"
-                    value="60"
-                    name="type"
-                    onChange={(e) =>
-                      handleChange(e.target.name, e.target.value)
-                    }
+                    name="length"
+                    onChange={(e) => handleChange(e.target.name, "60")}
                   />
                   60 min
                 </label>
                 <label>
                   <Input
                     type="radio"
-                    value="90"
-                    name="type"
-                    onChange={(e) =>
-                      handleChange(e.target.name, e.target.value)
-                    }
+                    name="length"
+                    onChange={(e) => handleChange(e.target.name, "90")}
                   />
                   90 min
                 </label>
                 <label>
                   <Input
                     type="radio"
-                    value="120"
-                    name="type"
-                    onChange={(e) =>
-                      handleChange(e.target.name, e.target.value)
-                    }
+                    name="length"
+                    onChange={(e) => handleChange(e.target.name, "120")}
                   />
                   120 min
                 </label>
                 <label>
                   <Input
                     type="radio"
-                    value="300"
-                    name="type"
-                    onChange={(e) =>
-                      handleChange(e.target.name, e.target.value)
-                    }
+                    name="length"
+                    onChange={(e) => handleChange(e.target.name, "300")}
                   />
-                  I'v got all the time
+                  I've got all the time
                 </label>
               </>
             )}
             {formData1.type === "tv" && (
               <>
-                <h2>Length (tv)</h2>
                 <label>
                   <Input
                     type="radio"
-                    value="20"
                     name="type"
-                    onChange={(e) =>
-                      handleChange(e.target.name, e.target.value)
-                    }
+                    onChange={(e) => handleChange(e.target.name, "20")}
                   />
                   20
                 </label>
                 <label>
                   <Input
                     type="radio"
-                    value="30"
                     name="type"
-                    onChange={(e) =>
-                      handleChange(e.target.name, e.target.value)
-                    }
+                    onChange={(e) => handleChange(e.target.name, "30")}
                   />
                   30
                 </label>
                 <label>
                   <Input
                     type="radio"
-                    value="60"
                     name="type"
-                    onChange={(e) =>
-                      handleChange(e.target.name, e.target.value)
-                    }
+                    onChange={(e) => handleChange(e.target.name, "60")}
                   />
                   60
                 </label>
                 <label>
                   <Input
                     type="radio"
-                    value="120"
                     name="type"
-                    onChange={(e) =>
-                      handleChange(e.target.name, e.target.value)
-                    }
+                    onChange={(e) => handleChange(e.target.name, "120")}
                   />
                   120
                 </label>
                 <label>
                   <Input
                     type="radio"
-                    value="300"
                     name="type"
-                    onChange={(e) =>
-                      handleChange(e.target.name, e.target.value)
-                    }
+                    onChange={(e) => handleChange(e.target.name, "300")}
                   />
-                  I'v got all the time
+                  I've got all the time
                 </label>
               </>
             )}
