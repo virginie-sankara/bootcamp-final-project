@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 const Form = ({ user, userData, handleSubmit }) => {
   //SET formData1
@@ -47,6 +47,7 @@ const Form = ({ user, userData, handleSubmit }) => {
 
   const handleChange = (name, value) => {
     console.log(name, value);
+    console.log("valeur is" + typeof value);
     setFormData1({
       ...formData1,
       [name]: value,
@@ -136,6 +137,7 @@ const Form = ({ user, userData, handleSubmit }) => {
             {/* if formData1.type === "movie" */}
             {formData1.type === "movie" &&
               movieGenresData.map((genre) => {
+                console.log(typeof formData1.genre);
                 const isChecked = formData1.genre.includes(genre._id);
                 // set max checkboxes to 3
                 const isDisabled = formData1.genre.length >= 3 && !isChecked;
@@ -147,12 +149,15 @@ const Form = ({ user, userData, handleSubmit }) => {
                       name="genre"
                       checked={isChecked}
                       disabled={isDisabled}
-                      onChange={(e) =>
-                        handleChange(e.target.name, [
-                          ...formData1.genre,
-                          genre._id,
-                        ])
-                      }
+                      onChange={(e) => {
+                        let res = null;
+                        if (isChecked) {
+                          res = formData1.genre.filter((e) => e !== genre._id);
+                        } else {
+                          res = [...formData1.genre, genre._id];
+                        }
+                        handleChange(e.target.name, res);
+                      }}
                     />
                     {genre.name}
                   </label>
