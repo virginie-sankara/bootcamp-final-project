@@ -46,19 +46,11 @@ const Form = ({ user, userData, handleSubmit }) => {
   console.log("test");
 
   const handleChange = (name, value) => {
-    if (name === "genre") {
-      if (formData1.genre.includes(value)) {
-        // if genre is already selected, remove it
-        setFormData1({
-          ...formData1,
-          genre: formData1.genre.filter((genre) => genre !== value),
-        });
-      } else {
-        setFormData1({ ...formData1, genre: [value] });
-      }
-    } else {
-      setFormData1({ ...formData1, [name]: value });
-    }
+    console.log(name, value);
+    setFormData1({
+      ...formData1,
+      [name]: value,
+    });
   };
 
   return (
@@ -137,6 +129,9 @@ const Form = ({ user, userData, handleSubmit }) => {
         {renderDivGenre === true && (
           <DivGenre>
             <h2>Genre</h2>
+            {formData1.genre.length >= 3 && (
+              <p>You've reached the maximum choices allowed</p>
+            )}
 
             {/* if formData1.type === "movie" */}
             {formData1.type === "movie" &&
