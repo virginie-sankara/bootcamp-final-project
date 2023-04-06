@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 
-const Form = ({ user, userData }) => {
+const Form = ({ userData }) => {
   const navigate = useNavigate();
   //SET formData1
   const [formData1, setFormData1] = useState({

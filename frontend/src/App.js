@@ -3,15 +3,18 @@ import Home from "./Home";
 import Form from "./Form";
 import Confirmation from "./Confirmation";
 import { useAuth0 } from "@auth0/auth0-react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-// import styled from "styled-components";
+import styled from "styled-components";
 
 const App = () => {
-  const { user, loginWithPopup, logout, isAuthenticated } = useAuth0();
+  const { user, loginWithPopup, logout, isAuthenticated, isLoading } =
+    useAuth0();
   // const [friendId, setFriendId] = useState("");
   // const [type, setType] = useState("");
-  const [userData, setUserData] = useState([]);
+  const [userData, setUserData] = useState(null);
+
+  console.log(userData);
 
   //   GET : User data
   useEffect(() => {
@@ -38,27 +41,26 @@ const App = () => {
 
   return (
     <main>
-      <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Home
-                user={user}
-                userData={userData}
-                loginWithPopup={loginWithPopup}
-                logout={logout}
-                isAuthenticated={isAuthenticated}
-              />
-            }
-          />
-          <Route
-            path="/form"
-            element={<Form userData={userData} user={user} />}
-          />
-          <Route path="/confirmation" element={<Confirmation />} />
-        </Routes>
-      </Router>
+      {isAuthenticated && userData ? (
+        <>
+          <nav
+            style={{
+              background: "red",
+            }}
+          >
+            <button onClick={logout}>Logout</button>
+          </nav>
+          <Router>
+            <Routes>
+              <Route path="/" element={<Home userData={userData} />} />
+              <Route path="/form" element={<Form userData={userData} />} />
+              <Route path="/confirmation" element={<Confirmation />} />
+            </Routes>
+          </Router>
+        </>
+      ) : (
+        <button onClick={loginWithPopup}>Login</button>
+      )}
     </main>
   );
 };
