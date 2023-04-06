@@ -12,7 +12,7 @@ const Home = ({ userData }) => {
         </Link>
       </div>
       <div>
-        <Link to="">
+        <Link to="/invitations">
           <button>Invitations received</button>
         </Link>
       </div>

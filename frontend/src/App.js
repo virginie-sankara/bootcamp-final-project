@@ -1,11 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Home";
 import Form from "./Form";
+import Form2 from "./Form2";
 import Confirmation from "./Confirmation";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import styled from "styled-components";
+import Invitations from "./Invitations";
+// import styled from "styled-components";
 
 const App = () => {
   const { user, loginWithPopup, logout, isAuthenticated, isLoading } =
@@ -13,6 +14,7 @@ const App = () => {
   // const [friendId, setFriendId] = useState("");
   // const [type, setType] = useState("");
   const [userData, setUserData] = useState(null);
+  const [userInvites, setUserInvites] = useState(null);
 
   console.log(userData);
 
@@ -37,7 +39,26 @@ const App = () => {
     }
   }, [user]);
 
-  // const navigate = useNavigate();
+  //   GET : User invites
+  useEffect(() => {
+    if (user) {
+      console.log(user);
+      fetch(`/get-user-invites/${user.email}`)
+        .then((res) => res.json())
+        .then((response) => {
+          if (response.status === 400 || response.status === 500) {
+            throw new Error(response.message);
+          } else {
+            setUserInvites(response.userInvites);
+            console.log("user invites here");
+            console.log(response.userInvites);
+          }
+        })
+        .catch((error) => {
+          console.log("Error:", error);
+        });
+    }
+  }, [user]);
 
   return (
     <main>
@@ -52,8 +73,21 @@ const App = () => {
           </nav>
           <Router>
             <Routes>
-              <Route path="/" element={<Home userData={userData} />} />
+              <Route
+                path="/"
+                element={<Home userData={userData} userInvites={userInvites} />}
+              />
               <Route path="/form" element={<Form userData={userData} />} />
+              <Route
+                path="/invitations"
+                element={
+                  <Invitations userData={userData} userInvites={userInvites} />
+                }
+              />
+              <Route
+                path="/invitation-response/:matchId"
+                element={<Form2 userData={userData} />}
+              />
               <Route path="/confirmation" element={<Confirmation />} />
             </Routes>
           </Router>
