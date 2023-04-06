@@ -57,9 +57,13 @@ const addMatch = async (req, res) => {
     const newMatch = await db()
       .collection("matches")
       .insertOne({
-        partners: [formData1.partners],
+        host: formData1.host,
+        partner: formData1.partner,
         type: formData1.type,
-        formData1: { genre: [formData1.genre], length: formData1.length },
+        formData1: {
+          genre: formData1.genre,
+          length: formData1.length,
+        },
         formData2: null,
         suggestion: null,
       });
@@ -69,42 +73,6 @@ const addMatch = async (req, res) => {
       newMatchData: newMatch,
       message: "New match successfully created",
     });
-  } catch (err) {
-    res.status(500).json({ status: 500, message: err.message });
-  }
-};
-
-// GET : MOVIE GENRES
-const getMovieGenres = async (req, res) => {
-  try {
-    const movieGenres = await db().collection("movieGenres").find().toArray();
-    console.log(movieGenres);
-
-    movieGenres
-      ? res.status(200).json({
-          status: 200,
-          movieGenres: movieGenres,
-          message: "The movie genres were successfully found",
-        })
-      : res.status(404).json({ status: 404, data: "Movie genres not found" });
-  } catch (err) {
-    res.status(500).json({ status: 500, message: err.message });
-  }
-};
-
-// GET : TV GENRES
-const getTvGenres = async (req, res) => {
-  try {
-    const tvGenres = await db().collection("tvGenres").find().toArray();
-    console.log(tvGenres);
-
-    tvGenres
-      ? res.status(200).json({
-          status: 200,
-          tvGenres: tvGenres,
-          message: "TV genres were successfully found",
-        })
-      : res.status(404).json({ status: 404, data: "TV genres not found" });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
@@ -130,13 +98,11 @@ const getMatches = async (req, res) => {
 
 // GET : A SPECIFIC MATCH
 const getMatch = async (req, res) => {
-  const _id = req.params.match;
-  console.log(_id);
+  const email = req.params.email;
+  console.log(email);
 
   try {
-    const match = await db()
-      .collection("matches")
-      .findOne({ _id: new ObjectId(_id) });
+    const match = await db().collection("matches").findOne({ email });
 
     match
       ? res.status(200).json({
@@ -149,6 +115,31 @@ const getMatch = async (req, res) => {
     res.status(500).json({ status: 500, data: err.message });
   }
 };
+
+// GET : Invites
+const getUserInvites = async (req, res) => {
+  const email = req.params.useremail;
+  console.log(email);
+
+  try {
+    const userInvites = await db()
+      .collection("matches")
+      .find({ partner: email })
+      .toArray();
+    console.log(userInvites);
+
+    userInvites
+      ? res.status(200).json({
+          status: 200,
+          userInvites: userInvites,
+          message: "The matches were successully found",
+        })
+      : res.status(404).json({ status: 404, data: "Not found" });
+  } catch (err) {
+    res.status(500).json({ status: 500, data: err.message });
+  }
+};
+
 // PATCH (update) : MATCH
 const updateMatch = async (req, res) => {
   const { _id, formData2 } = req.body;
@@ -216,6 +207,42 @@ const updateMatch = async (req, res) => {
   }
 };
 
+// GET : MOVIE GENRES
+const getMovieGenres = async (req, res) => {
+  try {
+    const movieGenres = await db().collection("movieGenres").find().toArray();
+    console.log(movieGenres);
+
+    movieGenres
+      ? res.status(200).json({
+          status: 200,
+          movieGenres: movieGenres,
+          message: "The movie genres were successfully found",
+        })
+      : res.status(404).json({ status: 404, data: "Movie genres not found" });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+};
+
+// GET : TV GENRES
+const getTvGenres = async (req, res) => {
+  try {
+    const tvGenres = await db().collection("tvGenres").find().toArray();
+    console.log(tvGenres);
+
+    tvGenres
+      ? res.status(200).json({
+          status: 200,
+          tvGenres: tvGenres,
+          message: "TV genres were successfully found",
+        })
+      : res.status(404).json({ status: 404, data: "TV genres not found" });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+};
+
 module.exports = {
   getUsers,
   getUser,
@@ -223,6 +250,7 @@ module.exports = {
   getTvGenres,
   addMatch,
   getMatches,
+  getUserInvites,
   getMatch,
   updateMatch,
 };

@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 
 const Form = ({ user, userData }) => {
+  const navigate = useNavigate();
   //SET formData1
   const [formData1, setFormData1] = useState({
-    partners: null,
+    host: userData.email,
+    partner: null,
     type: "",
     genre: [],
     length: "",
@@ -48,23 +51,16 @@ const Form = ({ user, userData }) => {
   const handleChange = (name, value) => {
     // console.log(name, value);
     // console.log("valeur is " + typeof value);
-    if (name === "partners") {
-      setFormData1({
-        ...formData1,
-        [name]: [userData.email, value],
-      });
-    } else {
-      setFormData1({
-        ...formData1,
-        [name]: value,
-      });
-    }
+    setFormData1({
+      ...formData1,
+      [name]: value,
+    });
   };
 
   const handleSubmit = (e, formData1) => {
     e.preventDefault();
 
-    // TODO: POST info to server
+    //  POST info to server
     fetch("/match", {
       method: "POST",
       headers: {
@@ -80,7 +76,7 @@ const Form = ({ user, userData }) => {
         }
         console.log(data);
         console.log("Success", data.data);
-        // navigate("/confirmation");
+        navigate("/");
       })
       .catch((error) => {
         console.log("Error:", error);
@@ -97,7 +93,7 @@ const Form = ({ user, userData }) => {
             <label key={friend.email}>
               <Input
                 type="radio"
-                name="partners"
+                name="partner"
                 // checked={formData1.partners === friend.email}
                 onChange={(e) => handleChange(e.target.name, friend.email)}
               />
@@ -109,7 +105,7 @@ const Form = ({ user, userData }) => {
             </label>
           ))}
           {/* // Button next that would render next div above the last */}
-          {formData1.partners && (
+          {formData1.partner && (
             <button
               onClick={(e) => {
                 e.preventDefault();
@@ -292,39 +288,39 @@ const Form = ({ user, userData }) => {
                 <label>
                   <Input
                     type="radio"
-                    name="type"
+                    name="length"
                     onChange={(e) => handleChange(e.target.name, "20")}
                   />
-                  20
+                  20 min
                 </label>
                 <label>
                   <Input
                     type="radio"
-                    name="type"
+                    name="length"
                     onChange={(e) => handleChange(e.target.name, "30")}
                   />
-                  30
+                  30 min
                 </label>
                 <label>
                   <Input
                     type="radio"
-                    name="type"
+                    name="length"
                     onChange={(e) => handleChange(e.target.name, "60")}
                   />
-                  60
+                  60 min
                 </label>
                 <label>
                   <Input
                     type="radio"
-                    name="type"
+                    name="length"
                     onChange={(e) => handleChange(e.target.name, "120")}
                   />
-                  120
+                  120 min
                 </label>
                 <label>
                   <Input
                     type="radio"
-                    name="type"
+                    name="length"
                     onChange={(e) => handleChange(e.target.name, "300")}
                   />
                   I've got all the time

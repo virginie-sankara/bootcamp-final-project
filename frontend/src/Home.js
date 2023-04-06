@@ -20,7 +20,7 @@ const Home = ({ user, userData, loginWithPopup, logout }) => {
           </div>
           <div>
             <Link to="">
-              <button>Invitations sent</button>
+              <button>View suggestions</button>
             </Link>
           </div>
         </>

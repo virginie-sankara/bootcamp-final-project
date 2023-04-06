@@ -13,6 +13,7 @@ const {
   getTvGenres,
   addMatch,
   getMatches,
+  getUserInvites,
   getMatch,
   updateMatch,
 } = require("./handlers");
@@ -33,6 +34,7 @@ express()
   .get("/get-movie-genres", getMovieGenres)
   .get("/get-tv-genres", getTvGenres)
   .get("/matches", getMatches)
+  .get("/get-user-invites/:useremail", getUserInvites)
   .get("/match/:match", getMatch)
   .post("/match", addMatch)
   .patch("/match/:match", updateMatch)
