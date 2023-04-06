@@ -8,6 +8,7 @@ const Form = ({ userData }) => {
   //SET formData1
   const [formData1, setFormData1] = useState({
     host: userData.email,
+    hostUsername: userData.username,
     partner: null,
     type: "",
     genre: [],

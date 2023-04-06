@@ -11,8 +11,6 @@ import Invitations from "./Invitations";
 const App = () => {
   const { user, loginWithPopup, logout, isAuthenticated, isLoading } =
     useAuth0();
-  // const [friendId, setFriendId] = useState("");
-  // const [type, setType] = useState("");
   const [userData, setUserData] = useState(null);
   const [userInvites, setUserInvites] = useState(null);
 

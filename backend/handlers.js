@@ -58,6 +58,7 @@ const addMatch = async (req, res) => {
       .collection("matches")
       .insertOne({
         host: formData1.host,
+        hostUsername: formData1.hostUsername,
         partner: formData1.partner,
         type: formData1.type,
         formData1: {
@@ -97,13 +98,13 @@ const getMatches = async (req, res) => {
   }
 };
 
-// GET : A SPECIFIC MATCH
+// GET : a specific match with matchId
 const getMatch = async (req, res) => {
-  const email = req.params.email;
-  console.log(email);
+  const _id = req.params.matchId;
+  const query = { _id: new ObjectId(_id) };
 
   try {
-    const match = await db().collection("matches").findOne({ email });
+    const match = await db().collection("matches").findOne(query);
 
     match
       ? res.status(200).json({
@@ -117,7 +118,7 @@ const getMatch = async (req, res) => {
   }
 };
 
-// GET : Invites
+// GET : Invitations received that contains user email as value of "partner" key
 const getUserInvites = async (req, res) => {
   const email = req.params.useremail;
   console.log(email);
@@ -164,7 +165,7 @@ const updateMatch = async (req, res) => {
 
     // Create new object with values to query
     const formDataToQuery = {
-      length: formData1.length.filter((val) => formData2.length.includes(val)),
+      length: parseInt(formData1.length) + parseInt(formData2.length) / 2,
       // Combine genre requested into new array and remove duplicated values
       genre: [...new Set(formData1.genre.concat(formData2.genre))],
     };

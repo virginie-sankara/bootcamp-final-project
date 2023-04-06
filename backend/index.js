@@ -35,7 +35,7 @@ express()
   .get("/get-tv-genres", getTvGenres)
   .get("/matches", getMatches)
   .get("/get-user-invites/:useremail", getUserInvites)
-  .get("/match/:match", getMatch)
+  .get("/match/:matchId", getMatch)
   .post("/match", addMatch)
   .patch("/match/:match", updateMatch)
 
