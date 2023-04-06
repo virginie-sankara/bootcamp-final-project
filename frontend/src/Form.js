@@ -14,6 +14,7 @@ const Form = ({ userData }) => {
     genre: [],
     length: "",
   });
+  const [matchId, setMatchId] = useState("");
 
   // RENDER div above each other
   const [renderDivType, setRenderDivType] = useState(false);
@@ -77,7 +78,8 @@ const Form = ({ userData }) => {
         }
         console.log(data);
         console.log("Success", data.data);
-        navigate("/");
+        setMatchId(data.data);
+        navigate(`/confirmation/${matchId}`);
       })
       .catch((error) => {
         console.log("Error:", error);

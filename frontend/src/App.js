@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Home";
 import Form from "./Form";
 import Form2 from "./Form2";
-import Confirmation from "./Confirmation";
+import ConfirmationPost from "./ConfirmationPost";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState, useEffect } from "react";
 import Invitations from "./Invitations";
@@ -86,7 +86,10 @@ const App = () => {
                 path="/invitation-response/:matchId"
                 element={<Form2 userData={userData} />}
               />
-              <Route path="/confirmation" element={<Confirmation />} />
+              <Route
+                path="/confirmation/:matchId"
+                element={<ConfirmationPost />}
+              />
             </Routes>
           </Router>
         </>
