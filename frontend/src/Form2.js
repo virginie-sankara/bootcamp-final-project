@@ -88,7 +88,7 @@ const Form2 = ({ userData }) => {
         }
         console.log(data);
         console.log("Success", data.data);
-        navigate("/");
+        navigate(`/confirmation/${matchId}`);
       })
       .catch((error) => {
         console.log("Error:", error);

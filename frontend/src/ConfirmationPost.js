@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const ConfirmationPost = () => {
+  const navigate = useNavigate();
   const { matchId } = useParams();
   const [matchData, setMatchData] = useState(null);
   // random confirmationMessage
@@ -17,7 +18,7 @@ const ConfirmationPost = () => {
     "Well done! Your answers have been submitted. You're officially awesome.",
     "Boom! Your answers have been submitted. Thanks for being awesome!",
     "Well, well, well, look who submitted their answers like a boss. You did, and we're impressed.",
-    "Yaaas, queen/king! Your answers have been submitted flawlessly. Keep slaying.",
+    "Yaaas ! Your answers have been submitted flawlessly. Keep slaying.",
     "Your answers have been successfully transmitted. If only all transmissions were this easy, amirite?",
     "You just knocked out those answers like a boss. Consider them submitted and consider yourself a boss.",
   ];
@@ -51,9 +52,8 @@ const ConfirmationPost = () => {
   return (
     <>
       <h2>{randomMessage}</h2>
-
-      {/* IF confirmation for match host */}
-      {matchData.formData2 === null && (
+      {/* IF confirmation from POST */}
+      {matchData && matchData.formData2 === null && (
         <p>
           Yay, {""}
           {matchData.hostUsername} has received your request to binge-watch{" "}
@@ -62,8 +62,28 @@ const ConfirmationPost = () => {
           ) : (
             <span>a movie</span>
           )}
-          . Now it's time to settle in and press play!
         </p>
+      )}
+      {/* // IF confirmation from PATCH */}
+      {matchData && matchData.formData2 !== null && (
+        <>
+          <p>
+            The suspense is killing us! Click down here to find out which{" "}
+            {matchData.type === "tv" ? (
+              <span>tv show</span>
+            ) : (
+              <span>movie</span>
+            )}{" "}
+            you'll be streaming with{""} {matchData.hostUsername}.
+          </p>
+          <button
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            Discover result
+          </button>
+        </>
       )}
     </>
   );
