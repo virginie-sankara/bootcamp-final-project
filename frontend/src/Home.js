@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 
 const Home = ({ userData }) => {
+  // GET
+
   return (
     <>
       <p>Nice to see you back {userData.firstName} !</p>

@@ -1,6 +1,6 @@
 "use strict";
 require("dotenv").config();
-const { ObjectId } = require("mongodb");
+const { ObjectId, Timestamp } = require("mongodb");
 const { TMDB_KEY } = process.env;
 const fetch = require("node-fetch");
 const mongo = require("./mongo");
@@ -66,6 +66,7 @@ const addMatch = async (req, res) => {
         },
         formData2: null,
         suggestion: null,
+        creationDate: Date(),
       });
 
     res.status(200).json({
