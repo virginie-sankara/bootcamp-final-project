@@ -6,6 +6,17 @@ const Invitations = ({ userData, userInvites }) => {
   console.log("ici");
   console.log(userInvites);
   const navigate = useNavigate();
+  // SORT : invitations from most recent to less recent
+  const [sortedInvitations, setSortedInvitations] = useState([]);
+
+  useEffect(() => {
+    if (userInvites) {
+      const sorted = [...userInvites].sort(
+        (a, b) => new Date(b.creationDate) - new Date(a.creationDate)
+      );
+      setSortedInvitations(sorted);
+    }
+  }, [userInvites]);
 
   return (
     <>
@@ -14,12 +25,19 @@ const Invitations = ({ userData, userInvites }) => {
       {!userInvites ? (
         <h2>No invitations received</h2>
       ) : (
-        userInvites.map((invitation) => {
+        sortedInvitations.map((invitation) => {
           if (invitation.formData2 === null) {
             return (
               <div key={invitation._id}>
-                {invitation.host}
-                {invitation.creationDate}
+                {invitation.hostUsername}
+                {new Date(invitation.creationDate).toLocaleString("en-US", {
+                  weekday: "short",
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                })}
 
                 <button
                   onClick={() => {

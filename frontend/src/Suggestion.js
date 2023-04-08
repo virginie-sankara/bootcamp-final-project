@@ -8,6 +8,7 @@ const Suggestion = ({
   tvGenresData,
 }) => {
   const { matchId } = useParams();
+  console.log("MATCHID" + matchId);
 
   const suggestionDetails = completedMatches
     .filter((match) => match._id === matchId)
@@ -17,22 +18,26 @@ const Suggestion = ({
 
   return (
     <>
-      <h2>Match result</h2>
       <div>
-        {suggestionDetails.map((suggestion) => (
-          <StyledSuggestion key={suggestion.id}>
-            <Poster
-              src={
-                "https://image.tmdb.org/t/p/original/" + suggestion.poster_path
-              }
-            />
-            <h2>{suggestion.title}</h2>
-            <p>{suggestion.release_date}</p>
-            <p>{suggestion.vote_average}</p>
-            <p>{suggestion.original_language}</p>
-            <p>{suggestion.overview}</p>
-          </StyledSuggestion>
-        ))}
+        {suggestionDetails.map((suggestion) => {
+          const year = suggestion.release_date.split("-")[0];
+          return (
+            <StyledSuggestion key={suggestion.id}>
+              <h2>{suggestion.title}</h2>
+              <Poster
+                src={
+                  "https://image.tmdb.org/t/p/original/" +
+                  suggestion.poster_path
+                }
+              />
+
+              <p>{year}</p>
+              <p>{suggestion.vote_average}</p>
+              <p>{suggestion.original_language.toUpperCase()}</p>
+              <p>{suggestion.overview}</p>
+            </StyledSuggestion>
+          );
+        })}
       </div>
     </>
   );

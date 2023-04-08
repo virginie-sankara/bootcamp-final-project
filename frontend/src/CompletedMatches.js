@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
-import Suggestion from "./Suggestion";
+import { useNavigate } from "react-router-dom";
 
 const CompletedMatches = ({ userData, completedMatches }) => {
   const navigate = useNavigate();
@@ -25,7 +24,16 @@ const CompletedMatches = ({ userData, completedMatches }) => {
               navigate(`/match-result/${match._id}`);
             }}
           >
-            <p>{match.creationDate}</p>
+            <p>
+              {new Date(match.creationDate).toLocaleString("en-US", {
+                weekday: "short",
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+              })}
+            </p>
             <Poster
               src={
                 "https://image.tmdb.org/t/p/original/" +
@@ -43,6 +51,6 @@ const Poster = styled.img`
   width: 100vw;
 
   filter: blur(8px);
-  -webkit-filter: blur(8px);
+  -webkit-filter: blur(20px);
 `;
 export default CompletedMatches;

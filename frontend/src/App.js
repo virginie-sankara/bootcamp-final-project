@@ -16,6 +16,7 @@ const App = () => {
     useAuth0();
   const [userData, setUserData] = useState(null);
   const [userInvites, setUserInvites] = useState(null);
+  console.log(userInvites);
   const [completedMatches, setCompletedMatches] = useState(null);
   // FETCH movie + tv genres
   const [movieGenresData, setMovieGenresData] = useState([]);
