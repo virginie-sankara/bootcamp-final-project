@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 
-const Form = ({ userData }) => {
+const Form = ({ userData, movieGenresData, tvGenresData }) => {
   const navigate = useNavigate();
   //SET formData1
   const [formData1, setFormData1] = useState({
@@ -20,32 +20,6 @@ const Form = ({ userData }) => {
   const [renderDivType, setRenderDivType] = useState(false);
   const [renderDivGenre, setRenderDivGenre] = useState(false);
   const [renderDivLength, setRenderDivLength] = useState(false);
-
-  // FETCH movie + tv genres
-  const [movieGenresData, setMovieGenresData] = useState([]);
-  const [tvGenresData, setTvGenresData] = useState([]);
-
-  //   GET : Movie + TV genres
-  useEffect(() => {
-    Promise.all([fetch("/get-movie-genres"), fetch("/get-tv-genres")])
-      .then(([movieGenresRes, tvGenresRes]) =>
-        Promise.all([movieGenresRes.json(), tvGenresRes.json()])
-      )
-      .then(([movieGenres, tvGenres]) => {
-        if (
-          movieGenres.status === 400 ||
-          movieGenres.status === 500 ||
-          tvGenres.status === 400 ||
-          tvGenres.status === 500
-        ) {
-          throw new Error(`${movieGenres.message}, ${tvGenres.message}`);
-        } else {
-          setMovieGenresData(movieGenres.movieGenres);
-          console.log(movieGenres);
-          setTvGenresData(tvGenres.tvGenres);
-        }
-      });
-  }, []);
 
   console.log(formData1);
   console.log("test");

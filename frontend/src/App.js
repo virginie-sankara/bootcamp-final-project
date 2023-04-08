@@ -5,6 +5,7 @@ import Form from "./Form";
 import Form2 from "./Form2";
 import ConfirmationPost from "./ConfirmationPost";
 import CompletedMatches from "./CompletedMatches";
+import Suggestion from "./Suggestion";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState, useEffect } from "react";
 import Invitations from "./Invitations";
@@ -16,6 +17,9 @@ const App = () => {
   const [userData, setUserData] = useState(null);
   const [userInvites, setUserInvites] = useState(null);
   const [completedMatches, setCompletedMatches] = useState(null);
+  // FETCH movie + tv genres
+  const [movieGenresData, setMovieGenresData] = useState([]);
+  const [tvGenresData, setTvGenresData] = useState([]);
 
   console.log(userData);
 
@@ -82,6 +86,28 @@ const App = () => {
     }
   }, [user]);
 
+  //   GET : Movie + TV genres
+  useEffect(() => {
+    Promise.all([fetch("/get-movie-genres"), fetch("/get-tv-genres")])
+      .then(([movieGenresRes, tvGenresRes]) =>
+        Promise.all([movieGenresRes.json(), tvGenresRes.json()])
+      )
+      .then(([movieGenres, tvGenres]) => {
+        if (
+          movieGenres.status === 400 ||
+          movieGenres.status === 500 ||
+          tvGenres.status === 400 ||
+          tvGenres.status === 500
+        ) {
+          throw new Error(`${movieGenres.message}, ${tvGenres.message}`);
+        } else {
+          setMovieGenresData(movieGenres.movieGenres);
+          console.log(movieGenres);
+          setTvGenresData(tvGenres.tvGenres);
+        }
+      });
+  }, []);
+
   return (
     <main>
       {isAuthenticated && userData ? (
@@ -99,7 +125,16 @@ const App = () => {
                 path="/"
                 element={<Home userData={userData} userInvites={userInvites} />}
               />
-              <Route path="/form" element={<Form userData={userData} />} />
+              <Route
+                path="/form"
+                element={
+                  <Form
+                    userData={userData}
+                    movieGenresData={movieGenresData}
+                    tvGenres={tvGenresData}
+                  />
+                }
+              />
               <Route
                 path="/invitations"
                 element={
@@ -108,7 +143,13 @@ const App = () => {
               />
               <Route
                 path="/invitation-response/:matchId"
-                element={<Form2 userData={userData} />}
+                element={
+                  <Form2
+                    userData={userData}
+                    movieGenresData={movieGenresData}
+                    tvGenres={tvGenresData}
+                  />
+                }
               />
               <Route
                 path="/confirmation/:matchId"
@@ -120,6 +161,17 @@ const App = () => {
                   <CompletedMatches
                     userData={userData}
                     completedMatches={completedMatches}
+                  />
+                }
+              />
+              <Route
+                path="/match-result/:matchId"
+                element={
+                  <Suggestion
+                    userData={userData}
+                    completedMatches={completedMatches}
+                    movieGenresData={movieGenresData}
+                    tvGenres={tvGenresData}
                   />
                 }
               />
