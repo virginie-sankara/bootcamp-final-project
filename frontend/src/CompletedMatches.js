@@ -6,12 +6,23 @@ const CompletedMatches = ({ userData, completedMatches }) => {
   return (
     <>
       {completedMatches.map((match) => {
-        <div key={match._id}>
-          <p>{match.creationDate}</p>
-          <img>{match.suggestion.overview}</img>
-        </div>;
+        return (
+          <div key={match._id}>
+            <p>{match.creationDate}</p>
+            <Poster
+              src={
+                "https://image.tmdb.org/t/p/original/" +
+                match.suggestion.poster_path
+              }
+            />
+          </div>
+        );
       })}
     </>
   );
 };
+
+const Poster = styled.img`
+  width: 300px;
+`;
 export default CompletedMatches;
