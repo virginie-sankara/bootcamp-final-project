@@ -5,9 +5,19 @@ import Suggestion from "./Suggestion";
 
 const CompletedMatches = ({ userData, completedMatches }) => {
   const navigate = useNavigate();
+  // SORT : matches from most recent to less recent
+  const [sortedMatches, setSortedMatches] = useState([]);
+
+  useEffect(() => {
+    const sorted = [...completedMatches].sort(
+      (a, b) => new Date(b.creationDate) - new Date(a.creationDate)
+    );
+    setSortedMatches(sorted);
+  }, [completedMatches]);
+
   return (
     <>
-      {completedMatches.map((match) => {
+      {sortedMatches.map((match) => {
         return (
           <div
             key={match._id}
@@ -19,7 +29,7 @@ const CompletedMatches = ({ userData, completedMatches }) => {
             <Poster
               src={
                 "https://image.tmdb.org/t/p/original/" +
-                match.suggestion.poster_path
+                match.suggestion.backdrop_path
               }
             />
           </div>
@@ -30,6 +40,9 @@ const CompletedMatches = ({ userData, completedMatches }) => {
 };
 
 const Poster = styled.img`
-  width: 300px;
+  width: 100vw;
+
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
 `;
 export default CompletedMatches;
