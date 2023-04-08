@@ -60,6 +60,8 @@ const addMatch = async (req, res) => {
         host: formData1.host,
         hostUsername: formData1.hostUsername,
         partner: formData1.partner,
+        partnerUsername: formData1.partnerUsername,
+        emails: [formData1.host, formData1.partner],
         type: formData1.type,
         formData1: {
           genre: formData1.genre,
@@ -67,6 +69,7 @@ const addMatch = async (req, res) => {
         },
         formData2: null,
         suggestion: null,
+        completed: false,
         creationDate: Date(),
       });
 
@@ -142,6 +145,32 @@ const getUserInvites = async (req, res) => {
   }
 };
 
+// GET : Completed matches (+ matches results)
+const getCompletedMatches = async (req, res) => {
+  const email = req.params.useremail;
+  console.log(email);
+
+  try {
+    const completedMatches = await db()
+      .collection("matches")
+      .find({
+        emails: email,
+        completed: true,
+      })
+      .toArray();
+
+    completedMatches
+      ? res.status(200).json({
+          status: 200,
+          data: completedMatches,
+          message: "The completed matches were successully found",
+        })
+      : res.status(404).json({ status: 404, data: "Not found" });
+  } catch (err) {
+    res.status(500).json({ status: 500, data: err.message });
+  }
+};
+
 // PATCH (update) : MATCH
 const updateMatch = async (req, res) => {
   const { _id, formData2 } = req.body;
@@ -151,7 +180,7 @@ const updateMatch = async (req, res) => {
     // Combine current match form data with form data from second user
     const query = { _id: new ObjectId(_id) };
     const matchToUpdate = await db().collection("matches").findOne(query);
-    const newValue = { $set: { formData2: formData2 } };
+    const newValue = { $set: { formData2: formData2, completed: true } };
 
     const type = matchToUpdate.type;
     const formData1 = matchToUpdate.formData1;
@@ -252,6 +281,7 @@ module.exports = {
   getTvGenres,
   addMatch,
   getMatches,
+  getCompletedMatches,
   getUserInvites,
   getMatch,
   updateMatch,

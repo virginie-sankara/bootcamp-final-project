@@ -15,20 +15,22 @@ const Invitations = ({ userData, userInvites }) => {
         <h2>No invitations received</h2>
       ) : (
         userInvites.map((invitation) => {
-          return (
-            <div key={invitation._id}>
-              {invitation.host}
-              {invitation.creationDate.slice(0, -24)}
+          if (invitation.formData2 === null) {
+            return (
+              <div key={invitation._id}>
+                {invitation.host}
+                {invitation.creationDate}
 
-              <button
-                onClick={() => {
-                  navigate(`/invitation-response/${invitation._id}`);
-                }}
-              >
-                Respond
-              </button>
-            </div>
-          );
+                <button
+                  onClick={() => {
+                    navigate(`/invitation-response/${invitation._id}`);
+                  }}
+                >
+                  Respond
+                </button>
+              </div>
+            );
+          }
         })
       )}
     </>

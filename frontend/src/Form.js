@@ -10,11 +10,11 @@ const Form = ({ userData }) => {
     host: userData.email,
     hostUsername: userData.username,
     partner: null,
+    partnerUsername: null,
     type: "",
     genre: [],
     length: "",
   });
-  const [matchId, setMatchId] = useState("");
 
   // RENDER div above each other
   const [renderDivType, setRenderDivType] = useState(false);
@@ -51,8 +51,6 @@ const Form = ({ userData }) => {
   console.log("test");
 
   const handleChange = (name, value) => {
-    // console.log(name, value);
-    // console.log("valeur is " + typeof value);
     setFormData1({
       ...formData1,
       [name]: value,
@@ -78,8 +76,7 @@ const Form = ({ userData }) => {
         }
         console.log(data);
         console.log("Success", data.data);
-        setMatchId(data.data);
-        navigate(`/confirmation/${matchId}`);
+        navigate(`/confirmation/${data.newMatchData.insertedId}`);
       })
       .catch((error) => {
         console.log("Error:", error);
@@ -97,8 +94,13 @@ const Form = ({ userData }) => {
               <Input
                 type="radio"
                 name="partner"
-                // checked={formData1.partners === friend.email}
-                onChange={(e) => handleChange(e.target.name, friend.email)}
+                onClick={() => {
+                  setFormData1({
+                    ...formData1,
+                    partner: friend.email,
+                    partnerUsername: friend.username,
+                  });
+                }}
               />
               {friend.username}
               <FriendAvatar
@@ -161,7 +163,7 @@ const Form = ({ userData }) => {
         {/* DIV GENRE */}
         {renderDivGenre === true && (
           <DivGenre>
-            <h2>Genre</h2>
+            <h2>Genres</h2>
             {formData1.genre.length >= 3 && (
               <p>You've reached the maximum choices allowed</p>
             )}

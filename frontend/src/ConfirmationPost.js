@@ -54,15 +54,24 @@ const ConfirmationPost = () => {
       <h2>{randomMessage}</h2>
       {/* IF confirmation from POST */}
       {matchData && matchData.formData2 === null && (
-        <p>
-          Yay, {""}
-          {matchData.hostUsername} has received your request to binge-watch{" "}
-          {matchData.type === "tv" ? (
-            <span>a tv show</span>
-          ) : (
-            <span>a movie</span>
-          )}
-        </p>
+        <>
+          <p>
+            {matchData.partnerUsername} has received your match request. Happy{" "}
+            {matchData.type === "tv" ? (
+              <span>TV show</span>
+            ) : (
+              <span>movie</span>
+            )}{" "}
+            binge-watching !
+          </p>
+          <button
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            Home
+          </button>
+        </>
       )}
       {/* // IF confirmation from PATCH */}
       {matchData && matchData.formData2 !== null && (
@@ -70,11 +79,11 @@ const ConfirmationPost = () => {
           <p>
             The suspense is killing us! Click down here to find out which{" "}
             {matchData.type === "tv" ? (
-              <span>tv show</span>
+              <span>TV show</span>
             ) : (
               <span>movie</span>
             )}{" "}
-            you'll be streaming with{""} {matchData.hostUsername}.
+            you'll be watching with{""} {matchData.hostUsername}.
           </p>
           <button
             onClick={() => {

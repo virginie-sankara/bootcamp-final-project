@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 
 const Home = ({ userData }) => {
-  // GET
-
   return (
     <>
       <p>Nice to see you back {userData.firstName} !</p>
@@ -17,7 +15,7 @@ const Home = ({ userData }) => {
         </Link>
       </div>
       <div>
-        <Link to="">
+        <Link to={`/completed-matches/${userData.email}`}>
           <button>View suggestions</button>
         </Link>
       </div>

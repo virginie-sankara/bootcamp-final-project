@@ -97,17 +97,19 @@ const Form2 = ({ userData }) => {
 
   return (
     <>
-      <h2>Match details</h2>
-      <p>Creator : {formData1.hostUsername}</p>
-      <p>Media type : {formData1.type}</p>
+      <h2>Match info</h2>
+      <p>
+        Creator : <span>{formData1.hostUsername}</span>
+      </p>
+      <p>
+        Media type : {formData1.type === "tv" && <span>TV Show</span>}
+        {formData1.type === "movie" && <span>Movie</span>}
+      </p>
       <h2>Time to make your choices</h2>
-      <p>{matchId}</p>
-
       <StyledForm onSubmit={(e) => handleSubmit(e, formData2)}>
         {/* DIV GENRE */}
-
         <DivGenre>
-          <h2>Genre</h2>
+          <h2>Genres</h2>
           {formData2.genre.length >= 3 && (
             <p>You've reached the maximum choices allowed</p>
           )}
@@ -129,7 +131,7 @@ const Form2 = ({ userData }) => {
                     onChange={(e) => {
                       let res = null;
                       if (isChecked) {
-                        res = formData1.genre.filter((e) => e !== genre._id);
+                        res = formData2.genre.filter((e) => e !== genre._id);
                       } else {
                         res = [...formData2.genre, genre._id];
                       }
@@ -306,8 +308,6 @@ const StyledForm = styled.form`
   margin-left: 50px;
 `;
 
-const DivPartner = styled.div``;
-const DivType = styled.div``;
 const DivGenre = styled.div``;
 const DivLength = styled.div``;
 

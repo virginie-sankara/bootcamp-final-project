@@ -13,6 +13,7 @@ const {
   getTvGenres,
   addMatch,
   getMatches,
+  getCompletedMatches,
   getUserInvites,
   getMatch,
   updateMatch,
@@ -34,6 +35,7 @@ express()
   .get("/get-movie-genres", getMovieGenres)
   .get("/get-tv-genres", getTvGenres)
   .get("/matches", getMatches)
+  .get("/get-completed-matches/:useremail", getCompletedMatches)
   .get("/get-user-invites/:useremail", getUserInvites)
   .get("/match/:matchId", getMatch)
   .post("/match", addMatch)

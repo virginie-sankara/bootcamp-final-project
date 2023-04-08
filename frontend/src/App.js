@@ -1,8 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Home from "./Home";
 import Form from "./Form";
 import Form2 from "./Form2";
 import ConfirmationPost from "./ConfirmationPost";
+import CompletedMatches from "./CompletedMatches";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState, useEffect } from "react";
 import Invitations from "./Invitations";
@@ -13,6 +15,7 @@ const App = () => {
     useAuth0();
   const [userData, setUserData] = useState(null);
   const [userInvites, setUserInvites] = useState(null);
+  const [completedMatches, setCompletedMatches] = useState(null);
 
   console.log(userData);
 
@@ -58,6 +61,27 @@ const App = () => {
     }
   }, [user]);
 
+  //  GET : Completed matches
+  useEffect(() => {
+    if (user) {
+      console.log(user);
+      fetch(`/get-completed-matches/${user.email}`)
+        .then((res) => res.json())
+        .then((response) => {
+          if (response.status === 400 || response.status === 500) {
+            throw new Error(response.message);
+          } else {
+            setCompletedMatches(response.data);
+            console.log("user completed matches here");
+            console.log(response.data);
+          }
+        })
+        .catch((error) => {
+          console.log("Error:", error);
+        });
+    }
+  }, [user]);
+
   return (
     <main>
       {isAuthenticated && userData ? (
@@ -88,7 +112,16 @@ const App = () => {
               />
               <Route
                 path="/confirmation/:matchId"
-                element={<ConfirmationPost />}
+                element={<ConfirmationPost userData={userData} />}
+              />
+              <Route
+                path="/completed-matches/:useremail"
+                element={
+                  <CompletedMatches
+                    userData={userData}
+                    completedMatches={completedMatches}
+                  />
+                }
               />
             </Routes>
           </Router>
