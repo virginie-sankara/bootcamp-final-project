@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useEffect, useState } from "react";
 
 const Suggestion = ({
   userData,
@@ -10,35 +11,41 @@ const Suggestion = ({
   const { matchId } = useParams();
   console.log("MATCHID" + matchId);
 
-  const suggestionDetails = completedMatches
-    .filter((match) => match._id === matchId)
-    .map((match) => match.suggestion);
+  const [suggestionDetails, setSuggestionDetails] = useState(null);
+
+  useEffect(() => {
+    if (completedMatches) {
+      const details = completedMatches
+        .filter((match) => match._id === matchId)
+        .map((match) => match.suggestion);
+      setSuggestionDetails(details[0]);
+    }
+  }, [completedMatches, matchId]);
+
+  if (!suggestionDetails) {
+    return <div>Loading...</div>;
+  }
+
+  console.log(suggestionDetails);
 
   // Stretch : Add genres
 
   return (
     <>
-      <div>
-        {suggestionDetails.map((suggestion) => {
-          const year = suggestion.release_date.split("-")[0];
-          return (
-            <StyledSuggestion key={suggestion.id}>
-              <h2>{suggestion.title}</h2>
-              <Poster
-                src={
-                  "https://image.tmdb.org/t/p/original/" +
-                  suggestion.poster_path
-                }
-              />
+      <StyledSuggestion key={suggestionDetails.id}>
+        <h2>{suggestionDetails.title}</h2>
+        <Poster
+          src={
+            "https://image.tmdb.org/t/p/original/" +
+            suggestionDetails.poster_path
+          }
+        />
 
-              <p>{year}</p>
-              <p>{suggestion.vote_average}</p>
-              <p>{suggestion.original_language.toUpperCase()}</p>
-              <p>{suggestion.overview}</p>
-            </StyledSuggestion>
-          );
-        })}
-      </div>
+        <p>{suggestionDetails.release_date.split("-")[0]}</p>
+        <p>{suggestionDetails.vote_average}</p>
+        <p>{suggestionDetails.original_language.toUpperCase()}</p>
+        <p>{suggestionDetails.overview}</p>
+      </StyledSuggestion>
     </>
   );
 };

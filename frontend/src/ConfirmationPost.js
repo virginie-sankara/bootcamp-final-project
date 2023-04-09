@@ -87,7 +87,7 @@ const ConfirmationPost = () => {
           </p>
           <button
             onClick={() => {
-              navigate("/");
+              navigate(`/match-result/${matchId}`);
             }}
           >
             Discover result
