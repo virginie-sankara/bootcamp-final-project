@@ -148,7 +148,7 @@ const App = () => {
                   <Form2
                     userData={userData}
                     movieGenresData={movieGenresData}
-                    tvGenres={tvGenresData}
+                    tvGenresData={tvGenresData}
                   />
                 }
               />

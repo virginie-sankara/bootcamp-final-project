@@ -26,10 +26,6 @@ const Suggestion = ({
     return <div>Loading...</div>;
   }
 
-  console.log(suggestionDetails);
-
-  // Stretch : Add genres
-
   return (
     <>
       <StyledSuggestion key={suggestionDetails.id}>
