@@ -24,8 +24,8 @@ const Form2 = ({ userData, movieGenresData, tvGenresData }) => {
           throw new Error(response.message);
         } else {
           setFormData1(response.match);
-          console.log("formData1 here");
-          console.log(response.match);
+          // console.log("formData1 here");
+          // console.log(response.match);
         }
       })
       .catch((error) => {
@@ -33,17 +33,17 @@ const Form2 = ({ userData, movieGenresData, tvGenresData }) => {
       });
   }, []);
 
-  console.log("formData2", formData2);
+  // console.log("formData2", formData2);
 
-  // GET genre names
+  // GET genres names
 
   const genresNames =
     tvGenresData && movieGenresData
       ? genresObject([...movieGenresData, ...tvGenresData])
       : {};
 
-  console.log(tvGenresData);
-  console.log("genreNames", genresNames);
+  // console.log(tvGenresData);
+  // console.log("genreNames", genresNames);
 
   const handleChange = (name, value) => {
     // console.log(name, value);
@@ -93,9 +93,12 @@ const Form2 = ({ userData, movieGenresData, tvGenresData }) => {
           Media type : {formData1.type === "tv" && <span>TV Show</span>}
           {formData1.type === "movie" && <span>Movie</span>}
         </p>
-        {formData1.formData1.genre.map((id) => {
-          return <p key={id}>{genresNames[id]}</p>;
-        })}
+        <p>
+          Genre(s) selected : {""}
+          {formData1.formData1.genre.map((id) => {
+            return <span key={id}>{genresNames[id]} </span>;
+          })}
+        </p>
         <h2>Time to make your choices</h2>
         <StyledForm onSubmit={(e) => handleSubmit(e, formData2)}>
           {/* DIV GENRE */}

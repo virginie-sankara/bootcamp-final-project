@@ -16,18 +16,16 @@ const App = () => {
     useAuth0();
   const [userData, setUserData] = useState(null);
   const [userInvites, setUserInvites] = useState(null);
-  console.log(userInvites);
   const [completedMatches, setCompletedMatches] = useState(null);
   // FETCH movie + tv genres
   const [movieGenresData, setMovieGenresData] = useState([]);
   const [tvGenresData, setTvGenresData] = useState([]);
 
-  console.log(userData);
+  // console.log(userData);
 
   //   GET : User data
   useEffect(() => {
     if (user) {
-      console.log(user);
       fetch(`/user/${user.email}`)
         .then((res) => res.json())
         .then((response) => {
@@ -35,8 +33,6 @@ const App = () => {
             throw new Error(response.message);
           } else {
             setUserData(response.user);
-            console.log("test");
-            console.log(response.user);
           }
         })
         .catch((error) => {
@@ -48,7 +44,6 @@ const App = () => {
   //   GET : User invites
   useEffect(() => {
     if (user) {
-      console.log(user);
       fetch(`/get-user-invites/${user.email}`)
         .then((res) => res.json())
         .then((response) => {
@@ -56,8 +51,6 @@ const App = () => {
             throw new Error(response.message);
           } else {
             setUserInvites(response.userInvites);
-            console.log("user invites here");
-            console.log(response.userInvites);
           }
         })
         .catch((error) => {
@@ -69,7 +62,6 @@ const App = () => {
   //  GET : Completed matches
   useEffect(() => {
     if (user) {
-      console.log(user);
       fetch(`/get-completed-matches/${user.email}`)
         .then((res) => res.json())
         .then((response) => {
@@ -77,8 +69,8 @@ const App = () => {
             throw new Error(response.message);
           } else {
             setCompletedMatches(response.data);
-            console.log("user completed matches here");
-            console.log(response.data);
+            // console.log("user completed matches here");
+            // console.log(response.data);
           }
         })
         .catch((error) => {
@@ -103,7 +95,6 @@ const App = () => {
           throw new Error(`${movieGenres.message}, ${tvGenres.message}`);
         } else {
           setMovieGenresData(movieGenres.movieGenres);
-          console.log(movieGenres);
           setTvGenresData(tvGenres.tvGenres);
         }
       });
@@ -132,7 +123,7 @@ const App = () => {
                   <Form
                     userData={userData}
                     movieGenresData={movieGenresData}
-                    tvGenres={tvGenresData}
+                    tvGenresData={tvGenresData}
                   />
                 }
               />
@@ -172,7 +163,7 @@ const App = () => {
                     userData={userData}
                     completedMatches={completedMatches}
                     movieGenresData={movieGenresData}
-                    tvGenres={tvGenresData}
+                    tvGenresData={tvGenresData}
                   />
                 }
               />

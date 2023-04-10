@@ -122,6 +122,7 @@ const getMatch = async (req, res) => {
 };
 
 // GET : Invitations received that contains user email as value of "partner" key
+
 const getUserInvites = async (req, res) => {
   const email = req.params.useremail;
   console.log(email);
@@ -129,7 +130,22 @@ const getUserInvites = async (req, res) => {
   try {
     const userInvites = await db()
       .collection("matches")
-      .find({ partner: email })
+      .aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "host",
+            foreignField: "email",
+            as: "host",
+          },
+        },
+        {
+          $match: {
+            partner: email,
+            suggestion: null,
+          },
+        },
+      ])
       .toArray();
     console.log(userInvites);
 
