@@ -30,6 +30,8 @@ button {
   border-radius: 25px;
   color: white;
   text-align: center;
+  margin-top: 3vh;
+
   margin-bottom: 3vh;
 
   &:hover {
