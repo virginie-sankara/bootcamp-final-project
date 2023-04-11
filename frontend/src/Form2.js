@@ -24,7 +24,7 @@ const Form2 = ({ userData, movieGenresData, tvGenresData }) => {
           throw new Error(response.message);
         } else {
           setFormData1(response.match);
-          // console.log("formData1 here");
+          console.log("formData1 here" + formData1);
           // console.log(response.match);
         }
       })

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Home from "./Home";
 import Form from "./Form";
 import Form2 from "./Form2";
+import GlobalStyle from "./GlobalStyle";
 import ConfirmationPost from "./ConfirmationPost";
 import CompletedMatches from "./CompletedMatches";
 import Suggestion from "./Suggestion";
@@ -112,6 +113,7 @@ const App = () => {
             <button onClick={logout}>Logout</button>
           </nav>
           <Router>
+            <GlobalStyle />
             <Routes>
               <Route
                 path="/"

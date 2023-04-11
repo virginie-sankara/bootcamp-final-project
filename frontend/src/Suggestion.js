@@ -10,11 +10,9 @@ const Suggestion = ({
   tvGenresData,
 }) => {
   const { matchId } = useParams();
-  // console.log("MATCHID" + matchId);
   const [matchData, setMatchData] = useState(null);
   const [suggestionDetails, setSuggestionDetails] = useState(null);
 
-  // GET matchData to get suggestionDetails
   useEffect(() => {
     fetch(`/match/${matchId}`)
       .then((res) => res.json())
@@ -23,7 +21,7 @@ const Suggestion = ({
           throw new Error(response.message);
         } else {
           setMatchData(response.match);
-          setSuggestionDetails(matchData.suggestion);
+          setSuggestionDetails(response.match.suggestion);
         }
       })
       .catch((error) => {
@@ -31,7 +29,6 @@ const Suggestion = ({
       });
   }, [matchId]);
 
-  // GET genres names
   const genresNames =
     tvGenresData && movieGenresData
       ? genresObject([...movieGenresData, ...tvGenresData])
@@ -41,44 +38,47 @@ const Suggestion = ({
 
   return (
     <>
-      {!suggestionDetails ? (
-        <div>Loading...</div>
-      ) : (
+      {suggestionDetails ? (
         <StyledSuggestion key={suggestionDetails.id}>
           {suggestionDetails.title ? (
             <h2>{suggestionDetails.title}</h2>
           ) : (
             <h2>{suggestionDetails.name}</h2>
           )}
-          {suggestionDetails.poster_path ? (
-            <Poster
-              src={
-                "https://image.tmdb.org/t/p/original/" +
-                suggestionDetails.poster_path
-              }
-            />
-          ) : (
-            // TO_DO : Create a generic image
-            <p>No poster</p>
-          )}
-
           {suggestionDetails.release_date && (
-            <p>{suggestionDetails.release_date.split("-")[0]}</p>
+            <Year>{suggestionDetails.release_date.split("-")[0]}</Year>
           )}
-          <p>
-            Genres :{" "}
-            {suggestionDetails.genre_ids.map((id) => {
-              return <span key={id}>{genresNames[id]} </span>;
-            })}
-          </p>
-          <p>Vote average : {suggestionDetails.vote_average}</p>
-          <p>{suggestionDetails.original_language.toUpperCase()}</p>
-          {suggestionDetails.overview !== "" ? (
-            <p>{suggestionDetails.overview}</p>
-          ) : (
-            <p>No description available</p>
-          )}
+          <SuggestionWrapper>
+            {suggestionDetails.poster_path ? (
+              <Poster
+                src={
+                  "https://image.tmdb.org/t/p/original/" +
+                  suggestionDetails.poster_path
+                }
+                alt="Movie or TV show poster"
+              />
+            ) : (
+              <p>No poster</p>
+            )}
+            <SuggestionInfo>
+              <p>GENRE </p>
+              {suggestionDetails.genre_ids.map((id) => {
+                return <span key={id}>{genresNames[id]} </span>;
+              })}
+              <p>VOTE AVERAGE </p>{" "}
+              <span> {suggestionDetails.vote_average}</span>
+              <p>ORIGINAL LANGUAGE </p>
+              <span>{suggestionDetails.original_language.toUpperCase()}</span>
+              {suggestionDetails.overview !== "" ? (
+                <p>{suggestionDetails.overview}</p>
+              ) : (
+                <p>No description available</p>
+              )}
+            </SuggestionInfo>
+          </SuggestionWrapper>
         </StyledSuggestion>
+      ) : (
+        <p>Loading...</p>
       )}
     </>
   );
@@ -88,6 +88,40 @@ const Poster = styled.img`
   width: 300px;
 `;
 
-const StyledSuggestion = styled.div``;
+const StyledSuggestion = styled.div`
+  margin: 0px;
+  padding: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("https://images.unsplash.com/photo-1636955779321-819753cd1741?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2942&q=80");
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const SuggestionWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  border: white 1px solid;
+`;
+
+const SuggestionInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.4);
+  font-size: 15px;
+  width: 40vw;
+  padding-left: 2vw;
+  align-items: center;
+`;
+
+const Year = styled.div`
+  margin-top: -3vh;
+  margin-bottom: 4vh;
+  font-size: 25px;
+`;
 
 export default Suggestion;
