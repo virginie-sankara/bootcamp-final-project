@@ -4,12 +4,14 @@ const GlobalStyle = createGlobalStyle`
   * {
     font-family: 'Prata', serif;
     color: white;
+    
   
 }
 h1 {
   
 font-family: 'Shrikhand', cursive;
 color: white;
+
 }
 
 h2 {
@@ -29,7 +31,18 @@ button {
   color: white;
   text-align: center;
   margin-bottom: 3vh;
+
+  &:hover {
+    background-color: white;
+    color: black;
+    
+  }
+
+ 
+  
 }
+
+
 
 
 `;

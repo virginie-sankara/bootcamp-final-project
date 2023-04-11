@@ -8,17 +8,17 @@ const Home = ({ userData }) => {
         <h2>Nice to see you back {userData.firstName} !</h2>
         <div>
           <Link to="/form">
-            <button>START</button>
+            <button>Start</button>
           </Link>
         </div>
         <div>
           <Link to="/invitations">
-            <button>INVITATIONS</button>
+            <button>Invitations</button>
           </Link>
         </div>
         <div>
           <Link to={`/completed-matches/${userData.email}`}>
-            <button>RESULTS</button>
+            <button>Results</button>
           </Link>
         </div>
       </TextWrapper>
@@ -28,6 +28,7 @@ const Home = ({ userData }) => {
 
 const HomeWrapper = styled.div`
   width: 100vw;
+  height: 100vh;
   background-image: url("https://images.unsplash.com/photo-1636955779321-819753cd1741?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2942&q=80");
   background-repeat: no-repeat;
   background-size: cover;

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 const ConfirmationPost = () => {
   const navigate = useNavigate();
@@ -50,11 +51,11 @@ const ConfirmationPost = () => {
   }, []);
 
   return (
-    <>
-      <h2>{randomMessage}</h2>
+    <PageWrapper>
       {/* IF confirmation from POST */}
       {matchData && matchData.formData2 === null && (
-        <>
+        <TextWrapper>
+          <ConfirmationMessage>{randomMessage}</ConfirmationMessage>
           <p>
             {matchData.partnerUsername} has received your match request. Happy{" "}
             {matchData.type === "tv" ? (
@@ -69,13 +70,14 @@ const ConfirmationPost = () => {
               navigate("/");
             }}
           >
-            Home
+            Back home
           </button>
-        </>
+        </TextWrapper>
       )}
       {/* // IF confirmation from PATCH */}
       {matchData && matchData.formData2 !== null && (
-        <>
+        <TextWrapper>
+          <ConfirmationMessage>{randomMessage}</ConfirmationMessage>
           <p>
             The suspense is killing us! Click down here to find out which{" "}
             {matchData.type === "tv" ? (
@@ -92,9 +94,36 @@ const ConfirmationPost = () => {
           >
             Discover result
           </button>
-        </>
+        </TextWrapper>
       )}
-    </>
+    </PageWrapper>
   );
 };
+
+const PageWrapper = styled.div`
+  width: 100vw;
+  min-height: 100vh;
+  background-image: url("https://images.unsplash.com/photo-1636955779321-819753cd1741?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2942&q=80");
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  justify-content: center;
+`;
+
+const TextWrapper = styled.div`
+  //   border: 2px solid white;
+  border-radius: 20px;
+  padding: 20px;
+  max-width: 600px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.4);
+`;
+
+const ConfirmationMessage = styled.h2`
+  font-size: 35px;
+`;
 export default ConfirmationPost;

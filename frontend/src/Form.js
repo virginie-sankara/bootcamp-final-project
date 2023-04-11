@@ -17,6 +17,7 @@ const Form = ({ userData, movieGenresData, tvGenresData }) => {
   });
 
   // RENDER div above each other
+  const [step, setStep] = useState(1);
   const [renderDivType, setRenderDivType] = useState(false);
   const [renderDivGenre, setRenderDivGenre] = useState(false);
   const [renderDivLength, setRenderDivLength] = useState(false);
@@ -58,30 +59,32 @@ const Form = ({ userData, movieGenresData, tvGenresData }) => {
   };
 
   return (
-    <>
+    <PageWrapper>
       <StyledForm onSubmit={(e) => handleSubmit(e, formData1)}>
         {/* DIV PARTNER */}
         <DivPartner>
           <h2>Pick your partner</h2>
           {userData.friends.map((friend) => (
-            <label key={friend.email}>
-              <Input
-                type="radio"
-                name="partner"
-                onClick={() => {
-                  setFormData1({
-                    ...formData1,
-                    partner: friend.email,
-                    partnerUsername: friend.username,
-                  });
-                }}
-              />
-              {friend.username}
+            <AvatarDiv key={friend.email}>
               <FriendAvatar
                 src={friend.avatarSrc}
                 alt={`Avatar for ${friend.username}`}
               />
-            </label>
+              <label key={friend.email}>
+                <Input
+                  type="radio"
+                  name="partner"
+                  onClick={() => {
+                    setFormData1({
+                      ...formData1,
+                      partner: friend.email,
+                      partnerUsername: friend.username,
+                    });
+                  }}
+                />
+                {friend.username}
+              </label>
+            </AvatarDiv>
           ))}
           {/* // Button next that would render next div above the last */}
           {formData1.partner && (
@@ -311,9 +314,26 @@ const Form = ({ userData, movieGenresData, tvGenresData }) => {
 
         <Submit type="submit">Confirm</Submit>
       </StyledForm>
-    </>
+    </PageWrapper>
   );
 };
+
+const PageWrapper = styled.div`
+  width: 100vw;
+  min-height: 100vh;
+  background-image: url("https://images.unsplash.com/photo-1636955779321-819753cd1741?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2942&q=80");
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+  align-items: center;
+`;
+
+const AvatarDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Submit = styled.button`
   background-color: #d1560e;
