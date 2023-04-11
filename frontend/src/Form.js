@@ -362,8 +362,8 @@ const Submit = styled.button`
   color: white;
   text-align: center;
   margin-top: 3vh;
-
   margin-bottom: 3vh;
+  width: 80vw;
 
   &:hover {
     background-color: white;
