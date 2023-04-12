@@ -70,6 +70,7 @@ const ComponentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 24px 0px;
 `;
 
 const PageTitle = styled.h1`
@@ -143,11 +144,12 @@ const MatchHeader = styled.div`
 // `;
 
 const MatchDate = styled.p`
-  font-size: 10px;
+  font-size: 11px;
   margin-left: 1vw;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-  padding: 3px;
+  padding: 4px 12px;
+  line-height: 1.4;
 
   text-align: center;
 `;
