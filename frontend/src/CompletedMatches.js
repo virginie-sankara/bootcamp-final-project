@@ -51,15 +51,15 @@ const CompletedMatches = ({ userData, completedMatches }) => {
                   </AvatarsDiv>
                 </MatchHeader>
                 <MediaType>{match.type}</MediaType>
+                {match.suggestion.backdrop_path && (
+                  <BackdropImg
+                    src={
+                      "https://image.tmdb.org/t/p/original/" +
+                      match.suggestion.backdrop_path
+                    }
+                  />
+                )}
               </MatchContent>
-              {match.suggestion.backdrop_path && (
-                <BackdropImg
-                  src={
-                    "https://image.tmdb.org/t/p/original/" +
-                    match.suggestion.backdrop_path
-                  }
-                />
-              )}
             </Match>
           );
         })}
@@ -68,13 +68,11 @@ const CompletedMatches = ({ userData, completedMatches }) => {
 };
 
 const ComponentWrapper = styled.div`
-  width: 100vw;
   background-image: url("https://images.unsplash.com/photo-1636955779321-819753cd1741?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2942&q=80");
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 `;
 
@@ -90,37 +88,40 @@ const Match = styled.div`
   border-radius: 25px;
   border: solid white 1px;
   padding: 10px;
+  overflow: hidden;
 `;
 
-const MatchContent = styled.div`
+const BackdropImg = styled.img`
   position: absolute;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
+  object-fit: cover;
+  object-position: center;
   width: 100%;
-  padding: 10px;
-  z-index: 1;
+  height: 100%;
+  transition: filter 0.4s ease-in-out;
+`;
+
+const MatchContent = styled.div`
+  & ${BackdropImg} {
+    -webkit-filter: blur(10px);
+    filter: blur(10px);
+  }
+
+  &:hover {
+    & ${BackdropImg} {
+      -webkit-filter: blur(3px);
+      filter: blur(3px);
+    }
+  }
 `;
 
 const MatchHeader = styled.div`
   display: flex;
   width: 80vw;
   justify-content: space-between;
-  margin-bottom: 3vh;
-`;
-
-const BackdropImg = styled.img`
-  width: 80vw;
-  height: 200px;
-  object-fit: cover;
-  -webkit-filter: blur(10px);
-  filter: blur(10px);
-  border-radius: 20px;
-
-  &:hover {
-    -webkit-filter: blur(3px);
-    filter: blur(3px);
-    transition: filter 1s ease-in-out;
-  }
 `;
 
 const AvatarsDiv = styled.div`
