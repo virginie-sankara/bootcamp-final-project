@@ -386,7 +386,7 @@ justify-content: space-between;`;
 
 const Input = styled.input`
   padding: 4px;
-  margin: 5px 0px;
+  margin-right: 4px;
 `;
 
 const FriendAvatar = styled.img`
