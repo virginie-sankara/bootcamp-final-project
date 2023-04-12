@@ -118,6 +118,10 @@ const Match = styled.div`
 
 const MatchContent = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
 `;
 
 const MatchHeader = styled.div`
@@ -138,7 +142,6 @@ const UserAvatar = styled.img`
   width: 30px;
   border-radius: 50%;
   object-fit: cover;
-  margin: auto;
   justify-content: center;
 `;
 
