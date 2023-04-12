@@ -105,7 +105,7 @@ const App = () => {
       <GlobalStyle />
       <Router>
         <Nav>
-          <HomeLogoLink>
+          <HomeLogoLink to="/">
             <svg
               width="40"
               height="40"
