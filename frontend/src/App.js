@@ -212,8 +212,8 @@ const App = () => {
                 <WelcomeContainer>
                   <AppName>BingeBuddy</AppName>
                   <Slogan>
-                    Our app finds the perfect movie/show compromise faster
-                    than you can say 'popcorn'
+                    We find the perfect movie/show compromise faster than you
+                    can say 'popcorn'
                   </Slogan>
                 </WelcomeContainer>
               }
@@ -251,8 +251,8 @@ const AppName = styled.h1`
 `;
 
 const Slogan = styled.h2`
-font-size: 27px;
-text-align: center;
+  font-size: 27px;
+  text-align: center;
 `;
 
 const WelcomeContainer = styled.div`
