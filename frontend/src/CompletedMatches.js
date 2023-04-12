@@ -33,6 +33,14 @@ const CompletedMatches = ({ userData, completedMatches }) => {
                 navigate(`/match-result/${match._id}`);
               }}
             >
+              {match.suggestion.backdrop_path && (
+                <BackdropImg
+                  src={
+                    "https://image.tmdb.org/t/p/original/" +
+                    match.suggestion.backdrop_path
+                  }
+                />
+              )}
               <MatchContent>
                 <MatchHeader>
                   <MatchDate>
@@ -51,14 +59,6 @@ const CompletedMatches = ({ userData, completedMatches }) => {
                   </AvatarsDiv>
                 </MatchHeader>
                 <MediaType>{match.type}</MediaType>
-                {match.suggestion.backdrop_path && (
-                  <BackdropImg
-                    src={
-                      "https://image.tmdb.org/t/p/original/" +
-                      match.suggestion.backdrop_path
-                    }
-                  />
-                )}
               </MatchContent>
             </Match>
           );
@@ -80,17 +80,6 @@ const PageTitle = styled.h1`
   font-size: 60px;
 `;
 
-const Match = styled.div`
-  position: relative;
-  width: 80vw;
-  height: 200px;
-  margin-top: 2vh;
-  border-radius: 25px;
-  border: solid white 1px;
-  padding: 10px;
-  overflow: hidden;
-`;
-
 const BackdropImg = styled.img`
   position: absolute;
   top: 0;
@@ -104,7 +93,16 @@ const BackdropImg = styled.img`
   transition: filter 0.4s ease-in-out;
 `;
 
-const MatchContent = styled.div`
+const Match = styled.div`
+  position: relative;
+  width: 80vw;
+  height: 200px;
+  margin-top: 2vh;
+  border-radius: 25px;
+  border: solid white 1px;
+  padding: 10px;
+  overflow: hidden;
+
   & ${BackdropImg} {
     -webkit-filter: blur(10px);
     filter: blur(10px);
@@ -116,6 +114,10 @@ const MatchContent = styled.div`
       filter: blur(3px);
     }
   }
+`;
+
+const MatchContent = styled.div`
+  position: relative;
 `;
 
 const MatchHeader = styled.div`
@@ -136,7 +138,6 @@ const UserAvatar = styled.img`
   width: 30px;
   border-radius: 50%;
   object-fit: cover;
-  z-index: 2;
   margin: auto;
   justify-content: center;
 `;
