@@ -7,6 +7,11 @@ const GlobalStyle = createGlobalStyle`
     
   
 }
+
+body {
+  margin: 0;
+}
+
 h1 {
   
 font-family: 'Shrikhand', cursive;
