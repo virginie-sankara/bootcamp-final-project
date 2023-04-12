@@ -186,14 +186,16 @@ const Form2 = ({ userData, movieGenresData, tvGenresData }) => {
 
                 {/* // Button next that would render next div above the last */}
                 {formData2.genre.length >= 1 && (
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setStep(2);
-                    }}
-                  >
-                    Next
-                  </button>
+                  <NextContainer>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setStep(2);
+                      }}
+                    >
+                      Next
+                    </button>
+                  </NextContainer>
                 )}
               </DivGenre>
             )}
@@ -351,7 +353,7 @@ const Submit = styled.button`
   text-align: center;
   margin-top: 3vh;
   margin-bottom: 3vh;
-  width: 80vw;
+  width: 100%;
 
   &:hover {
     background-color: white;
@@ -392,6 +394,11 @@ const FriendAvatar = styled.img`
   height: 100px;
   object-fit: cover;
   border-radius: 50%;
+`;
+
+const NextContainer = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
 export default Form2;
