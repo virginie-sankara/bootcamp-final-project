@@ -103,6 +103,7 @@ const App = () => {
 
   return (
     <main>
+      <GlobalStyle />
       {isAuthenticated && userData ? (
         <>
           <nav
@@ -113,7 +114,6 @@ const App = () => {
             <button onClick={logout}>Logout</button>
           </nav>
           <Router>
-            <GlobalStyle />
             <Routes>
               <Route
                 path="/"
