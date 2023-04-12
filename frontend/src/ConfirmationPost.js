@@ -57,7 +57,7 @@ const ConfirmationPost = () => {
       {matchData && matchData.formData2 === null && (
         <TextWrapper>
           <ConfirmationMessage>{randomMessage}</ConfirmationMessage>
-          <p>
+          <Message>
             {matchData.partnerUsername} has received your match request. Happy{" "}
             {matchData.type === "tv" ? (
               <span>TV show</span>
@@ -65,7 +65,7 @@ const ConfirmationPost = () => {
               <span>movie</span>
             )}{" "}
             binge-watching !
-          </p>
+          </Message>
           <button
             onClick={() => {
               navigate("/");
@@ -116,15 +116,23 @@ const PageWrapper = styled.div`
 `;
 
 const TextWrapper = styled.div`
-  //   border: 2px solid white;
   border-radius: 20px;
-  padding: 20px;
+  padding: 28px 20px;
   max-width: 600px;
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 `;
 
 const ConfirmationMessage = styled.h2`
   font-size: 35px;
+  margin: 0;
 `;
+
+const Message = styled.p`
+  margin: 0;
+`;
+
 export default ConfirmationPost;
