@@ -53,10 +53,6 @@ const CompletedMatches = ({ userData, completedMatches }) => {
                       minute: "numeric",
                     })}
                   </MatchDate>
-                  <AvatarsDiv>
-                    <UserAvatar src={userData.avatarSrc} />
-                    <UserAvatar src={userData.avatarSrc} />
-                  </AvatarsDiv>
                 </MatchHeader>
                 <MediaType>{match.type}</MediaType>
               </MatchContent>
@@ -130,20 +126,21 @@ const MatchHeader = styled.div`
   justify-content: space-between;
 `;
 
-const AvatarsDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-`;
+// STRETCH
 
-const UserAvatar = styled.img`
-  display: flex;
-  height: 30px;
-  width: 30px;
-  border-radius: 50%;
-  object-fit: cover;
-  justify-content: center;
-`;
+// const AvatarsDiv = styled.div`
+//   display: flex;
+//   flex-direction: row;
+//   gap: 10px;
+// `;
+// const UserAvatar = styled.img`
+//   display: flex;
+//   height: 30px;
+//   width: 30px;
+//   border-radius: 50%;
+//   object-fit: cover;
+//   justify-content: center;
+// `;
 
 const MatchDate = styled.p`
   font-size: 10px;
