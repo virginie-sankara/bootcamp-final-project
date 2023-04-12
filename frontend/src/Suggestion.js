@@ -116,7 +116,7 @@ const StyledSuggestion = styled.div`
 const SuggestionWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  border: white 1px solid;
+  border: rgba(255, 255, 255, 0.5) 1px solid;
   margin-bottom: 4vh;
 `;
 
@@ -124,7 +124,7 @@ const SuggestionInfo = styled.div`
   display: flex;
   flex-direction: column;
   background-color: rgba(0, 0, 0, 0.4);
-  font-size: 15px;
+  font-size: 28px;
   width: 40vw;
   padding-left: 2vw;
   padding-right: 1vw;
@@ -140,7 +140,8 @@ const Year = styled.div`
 `;
 
 const Vote = styled.p`
-  font-size: 35px;
+  font-size: 65px;
+  margin: 32px 0;
 `;
 
 export default Suggestion;
