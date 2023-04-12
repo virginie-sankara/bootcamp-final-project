@@ -10,7 +10,6 @@ const Suggestion = ({
   tvGenresData,
 }) => {
   const { matchId } = useParams();
-  const [matchData, setMatchData] = useState(null);
   const [suggestionDetails, setSuggestionDetails] = useState(null);
   const navigate = useNavigate();
 
@@ -21,7 +20,6 @@ const Suggestion = ({
         if (response.status === 400 || response.status === 500) {
           throw new Error(response.message);
         } else {
-          setMatchData(response.match);
           setSuggestionDetails(response.match.suggestion);
         }
       })
