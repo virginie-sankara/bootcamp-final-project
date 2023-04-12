@@ -12,8 +12,7 @@ import Invitations from "./Invitations";
 import Suggestion from "./Suggestion";
 
 const App = () => {
-  const { user, loginWithPopup, logout, isAuthenticated } =
-    useAuth0();
+  const { user, loginWithPopup, logout, isAuthenticated } = useAuth0();
   const [userData, setUserData] = useState(null);
   const [userInvites, setUserInvites] = useState(null);
   const [completedMatches, setCompletedMatches] = useState(null);
@@ -150,7 +149,7 @@ const App = () => {
           )}
         </Nav>
         <Routes>
-          {isAuthenticated && userData && (
+          {isAuthenticated && userData ? (
             <>
               <Route
                 path="/"
@@ -207,6 +206,19 @@ const App = () => {
                 }
               />
             </>
+          ) : (
+            <Route
+              element={
+                <WelcomeContainer>
+                  <AppName>BingeBuddy</AppName>
+                  <Slogan>
+                    Our app finds the perfect movie/show compromise faster
+                    than you can say 'popcorn'
+                  </Slogan>
+                </WelcomeContainer>
+              }
+              index
+            ></Route>
           )}
         </Routes>
       </Router>
@@ -226,10 +238,28 @@ const Main = styled.main`
   background-image: url("https://images.unsplash.com/photo-1636955779321-819753cd1741?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2942&q=80");
   background-repeat: no-repeat;
   background-size: cover;
+  display: flex;
+  flex-direction: column;
 `;
 
 const ActionBtn = styled.button`
   padding: 8px 12px;
 `;
 
+const AppName = styled.h1`
+  font-size: 150px;
+`;
+
+const Slogan = styled.h2`
+font-size: 27px;
+text-align: center;
+`;
+
+const WelcomeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+`;
 export default App;
