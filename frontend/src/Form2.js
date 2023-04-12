@@ -115,73 +115,75 @@ const Form2 = ({ userData, movieGenresData, tvGenresData }) => {
                   <p>You've reached the maximum choices allowed</p>
                 )}
 
-                {/* if formData1.type === "movie" */}
-                {formData1.type === "movie" &&
-                  movieGenresData.map((genre) => {
-                    const isChecked = formData2.genre.includes(genre._id);
-                    // set max checkboxes to 3
-                    const isDisabled =
-                      formData2.genre.length >= 3 && !isChecked;
+                <GenreContent>
+                  {/* if formData1.type === "movie" */}
+                  {formData1.type === "movie" &&
+                    movieGenresData.map((genre) => {
+                      const isChecked = formData2.genre.includes(genre._id);
+                      // set max checkboxes to 3
+                      const isDisabled =
+                        formData2.genre.length >= 3 && !isChecked;
 
-                    return (
-                      <GenreInputs key={genre._id}>
-                        <label key={genre._id}>
-                          <Input
-                            type="checkbox"
-                            name="genre"
-                            checked={isChecked}
-                            disabled={isDisabled}
-                            onChange={(e) => {
-                              let res = null;
-                              if (isChecked) {
-                                res = formData2.genre.filter(
-                                  (e) => e !== genre._id
-                                );
-                              } else {
-                                res = [...formData2.genre, genre._id];
-                              }
-                              handleChange(e.target.name, res);
-                            }}
-                          />
-                          {genre.name}
-                        </label>
-                      </GenreInputs>
-                    );
-                  })}
+                      return (
+                        <GenreInputs key={genre._id}>
+                          <label key={genre._id}>
+                            <Input
+                              type="checkbox"
+                              name="genre"
+                              checked={isChecked}
+                              disabled={isDisabled}
+                              onChange={(e) => {
+                                let res = null;
+                                if (isChecked) {
+                                  res = formData2.genre.filter(
+                                    (e) => e !== genre._id
+                                  );
+                                } else {
+                                  res = [...formData2.genre, genre._id];
+                                }
+                                handleChange(e.target.name, res);
+                              }}
+                            />
+                            {genre.name}
+                          </label>
+                        </GenreInputs>
+                      );
+                    })}
+                  {/* if formData1.type === "tv" */}
+                  {formData1.type === "tv" &&
+                    tvGenresData.map((genre) => {
+                      const isChecked = formData2.genre.includes(genre._id);
+                      // Set max checkboxes to 3
+                      const isDisabled =
+                        formData2.genre.length >= 3 && !isChecked;
 
-                {/* if formData1.type === "tv" */}
-                {formData1.type === "tv" &&
-                  tvGenresData.map((genre) => {
-                    const isChecked = formData2.genre.includes(genre._id);
-                    // Set max checkboxes to 3
-                    const isDisabled =
-                      formData2.genre.length >= 3 && !isChecked;
+                      return (
+                        <GenreInputs key={genre._id}>
+                          <label key={genre._id}>
+                            <Input
+                              type="checkbox"
+                              name="genre"
+                              checked={isChecked}
+                              disabled={isDisabled}
+                              onChange={(e) => {
+                                let res = null;
+                                if (isChecked) {
+                                  res = formData1.genre.filter(
+                                    (e) => e !== genre._id
+                                  );
+                                } else {
+                                  res = [...formData2.genre, genre._id];
+                                }
+                                handleChange(e.target.name, res);
+                              }}
+                            />
+                            {genre.name}
+                          </label>
+                        </GenreInputs>
+                      );
+                    })}
+                </GenreContent>
 
-                    return (
-                      <GenreInputs key={genre._id}>
-                        <label key={genre._id}>
-                          <Input
-                            type="checkbox"
-                            name="genre"
-                            checked={isChecked}
-                            disabled={isDisabled}
-                            onChange={(e) => {
-                              let res = null;
-                              if (isChecked) {
-                                res = formData1.genre.filter(
-                                  (e) => e !== genre._id
-                                );
-                              } else {
-                                res = [...formData2.genre, genre._id];
-                              }
-                              handleChange(e.target.name, res);
-                            }}
-                          />
-                          {genre.name}
-                        </label>
-                      </GenreInputs>
-                    );
-                  })}
                 {/* // Button next that would render next div above the last */}
                 {formData2.genre.length >= 1 && (
                   <button
@@ -307,11 +309,9 @@ const PageWrapper = styled.div`
   background-image: url("https://images.unsplash.com/photo-1636955779321-819753cd1741?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2942&q=80");
   background-repeat: no-repeat;
   background-size: cover;
-  text-align: center;
   align-items: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 `;
 
 const TextWrapper = styled.div`
@@ -321,11 +321,7 @@ const TextWrapper = styled.div`
   background-size: cover;
   border-radius: 20px;
   border: white solid 1px;
-  width: 80vw;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  width: 50vw;
 `;
 
 const PageTitle = styled.h1`
@@ -342,9 +338,6 @@ const SectionName = styled.h2`
 
 const Line = styled.div`
   border-bottom: 0.5px solid white;
-  width: 70vw;
-  align-items: center;
-  margin: auto;
   margin-top: 20px;
 `;
 
@@ -369,19 +362,16 @@ const Submit = styled.button`
 const StyledForm = styled.form``;
 
 const DivGenre = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: auto;
-  align-items: center;
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
 `;
+
+const GenreContent = styled.div``;
 
 const GenreInputs = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: 70vw;
-  // justify-content: flex-start;
-  // flex-direction: row;
-  // gap: 20px
 `;
 
 const DivLength = styled.div``;
