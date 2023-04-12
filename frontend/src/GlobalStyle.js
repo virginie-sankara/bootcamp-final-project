@@ -4,6 +4,7 @@ const GlobalStyle = createGlobalStyle`
   * {
     font-family: 'Prata', serif;
     color: white;
+    -webkit-font-smoothing: antialiased;
     
   
 }
@@ -35,10 +36,6 @@ button {
   border-radius: 25px;
   color: white;
   text-align: center;
-  margin-top: 3vh;
-
-  margin-bottom: 3vh;
-
   &:hover {
     background-color: white;
     color: black;
